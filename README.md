@@ -40,4 +40,4 @@ To remove a Windows service:
 
 ## License
 
-Please refer to [LICENSE](https://github.com/dhoer/chef-nssm/blob/master/LICENSE.md).
+MIT - see the accompanying [LICENSE](https://github.com/dhoer/chef-nssm/blob/master/LICENSE.md) file for details.
