@@ -32,14 +32,14 @@ Example Matcher Usage
       
 NSSM Cookbook Matchers
 
-- install_nssm_service
-- remove_nssm_service
+- install_nssm_service(servicename)
+- remove_nssm_service(servicename)
+
+## Getting Help
+
+- Ask specific questions on [Stack Overflow](http://stackoverflow.com/questions/tagged/chef-nssm).
+- Report bugs and discuss potential features in [Github issues](https://github.com/dhoer/chef-nssm/issues).
 
 ## Contributing
 
-1. Fork the repository on Github
-2. Create a named feature branch (like `add_component_x`)
-3. Write your change
-4. Write tests for your change (if applicable)
-5. Run the tests, ensuring they all pass
-6. Submit a Pull Request using Github
+Please refer to [CONTRIBUTING](https://github.com/dhoer/chef-nssm/blob/master/CONTRIBUTING.md).
