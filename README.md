@@ -9,7 +9,7 @@ Read [TLDR](https://github.com/dhoer/chef-nssm/blob/master/TLDR.md) for more det
 
 ### Platform
 
-Should work under Windows 2000 or later.  
+- Windows Server 2012 R2
 
 ### Cookbooks
 
@@ -17,18 +17,15 @@ Should work under Windows 2000 or later.
 
 ## Usage
 
-Simply add `recipe[nssm]` to a run list.
+Add `recipe[nssm]` to a run list.
 
 ### Examples
 
 To install a Windows service:
 
     nssm 'service name' do
-      app 'java'
-      args [
-        '-jar',
-        "'C:\\path to\\my-executable.jar'"
-      ]
+      program 'C:\\Windows\\System32\\java.exe'
+      args '-jar C:/path/to/my-executable.jar'
       action :install
     end
 

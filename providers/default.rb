@@ -1,13 +1,22 @@
+require 'win32ole' if RUBY_PLATFORM =~ /mswin|mingw32|windows/
+
+def execute_wmi_query(wmi_query)
+  wmi = ::WIN32OLE.connect('winmgmts://')
+  result = wmi.ExecQuery(wmi_query)
+  return nil unless result.each.count > 0
+  result
+end
+
 def service_installed?(servicename)
-  !(WMI::Win32_Service.find(:first, conditions: { name: servicename }).nil?)
+  !(execute_wmi_query("select * from Win32_Service where name = '#{servicename}'").nil?)
 end
 
 action :install do
   service_installed = service_installed?(new_resource.servicename)
 
-  batch "Install service #{new_resource.servicename}" do
+  batch "Install #{new_resource.servicename} service" do
     code <<-EOH
-      nssm install '#{new_resource.servicename}' '#{new_resource.app}' #{new_resource.args.join(' ')}
+      nssm install "#{new_resource.servicename}" #{new_resource.program} #{new_resource.args}
     EOH
     not_if { service_installed }
   end
@@ -27,7 +36,7 @@ action :remove do
 
   batch "Remove service #{new_resource.servicename}" do
     code <<-EOH
-      nssm remove '#{new_resource.servicename}' confirm
+      nssm remove "#{new_resource.servicename}" confirm
     EOH
     only_if { service_installed }
   end

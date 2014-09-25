@@ -2,6 +2,27 @@
 
 ## Usage
 
+Advanced usage of NSSM.
+
+### Examples
+
+When dealing with an argument that contain spaces, add triple double quotes `"""` around it:
+
+    nssm 'service name' do
+      program 'C:\\Windows\\System32\\java.exe'
+      args '-jar """C:/path/with spaces to/my-executable.jar"""'
+      action :install
+    end
+    
+When dealing with an arguments that require interpolation and handling of spaces, then encapsulate the entire args using `%Q{}` notation and use `"""` around the arguments containing spaces:
+
+    my_path_with_spaces = 'C:/path/with spaces to/my-executable.jar
+    nssm 'service name' do
+      program 'C:\\Windows\\System32\\java.exe'
+      args %Q{-jar """#{my_path_with_spaces}"""}
+      action :install
+    end
+
 ### Attributes
 
 - `node['nssm']['src']` - This can either be a URI or a local path to nssm zip.
@@ -17,8 +38,8 @@
 #### Attribute Parameters
 
 - :servicename: Name attribute. The name of the Windows service.
-- :app: The program to be run as a service. 
-- :args: Array of arguments for the program. Optional
+- :program: The program to be run as a service. 
+- :args: String of arguments for the program. Optional
 - :start: Start service after installing. Default: true
 
 ## ChefSpec Matchers
@@ -28,7 +49,9 @@ The NSSM cookbook includes custom [ChefSpec](https://github.com/sethvargo/chefsp
 Example Matcher Usage
 
     expect(chef_run).to install_nssm_service('service name').with(
-      app: 'java')
+      :program 'C:\\Windows\\System32\\java.exe'
+      :args '-jar C:/path/to/my-executable.jar'    
+    )
       
 NSSM Cookbook Matchers
 

@@ -1,8 +1,5 @@
 nssm 'service name' do
-  app 'java'
-  args [
-    '-jar',
-    "'C:\\path to\\my-executable.jar'"
-  ]
+  program 'C:\\Windows\\System32\\java.exe'
+  args '-jar C:/path/to/my-executable.jar'
   action :install
 end

@@ -6,8 +6,10 @@ describe 'nssm_test::remove_service' do
   let(:fake_class) { Class.new }
 
   before do
-    stub_const('WMI::Win32_Service', fake_class)
-    allow(fake_class).to receive(:find) { 'ignore' }
+    stub_const('::WIN32OLE', fake_class)
+    obj = double
+    allow(obj).to receive(:ExecQuery) { [''] }
+    allow(fake_class).to receive(:connect) { obj }
   end
 
   it 'calls nssm remove resource' do
@@ -16,7 +18,7 @@ describe 'nssm_test::remove_service' do
 
   it 'executes batch command to remove service' do
     expect(chef_run).to run_batch('Remove service service name').with(
-      code: /nssm remove 'service name' confirm/
+      code: /nssm remove "service name" confirm/
     )
   end
 end

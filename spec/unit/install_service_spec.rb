@@ -6,20 +6,22 @@ describe 'nssm_test::install_service' do
   let(:fake_class) { Class.new }
 
   before do
-    stub_const('WMI::Win32_Service', fake_class)
-    allow(fake_class).to receive(:find) { nil }
+    stub_const('::WIN32OLE', fake_class)
+    obj = double
+    allow(obj).to receive(:ExecQuery) { [] }
+    allow(fake_class).to receive(:connect) { obj }
   end
 
   it 'calls nssm install resource' do
     expect(chef_run).to install_nssm_service('service name').with(
-      app: 'java',
-      args: ['-jar', "'C:\\path to\\my-executable.jar'"]
+      program: 'C:\\Windows\\System32\\java.exe',
+      args: '-jar C:/path/to/my-executable.jar'
     )
   end
 
   it 'executes batch command to install service' do
-    expect(chef_run).to run_batch('Install service service name').with(
-      code: /nssm install 'service name' 'java' -jar 'C:\\path to\\my-executable.jar'/
+    expect(chef_run).to run_batch('Install service name service').with(
+      code: %r{nssm install "service name" C:\\Windows\\System32\\java.exe -jar C:/path/to/my-executable.jar}
     )
   end
 
