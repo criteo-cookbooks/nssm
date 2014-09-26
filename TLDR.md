@@ -4,22 +4,24 @@
 
 Advanced usage of NSSM.
 
-### Examples
+### Arguments with Spaces
 
-When dealing with an argument that contain spaces, add triple double quotes `"""` around it:
+Having spaces in `servicename` and `program` attributes is not a problem, but spaces in an argument is a different matter.
+
+When dealing with an argument containing spaces, add [3 double quotes](https://stackoverflow.com/questions/7760545/cmd-escape-double-quotes-in-parameter/15262019#15262019?s=62228804c3f84fceb873ee30dd784161) `"""` around it:
 
     nssm 'service name' do
-      program 'C:\\Windows\\System32\\java.exe'
+      program 'C:\Program Files\Java\jdk1.7.0_67\bin\java.exe'
       args '-jar """C:/path/with spaces to/my-executable.jar"""'
       action :install
     end
     
-When dealing with an arguments that require interpolation and handling of spaces, then encapsulate the entire args using `%Q{}` notation and use `"""` around the arguments containing spaces:
+When dealing with arguments requiring [interpolation](http://en.wikibooks.org/wiki/Ruby_Programming/Syntax/Literals#Interpolation) and contain an argument with spaces, then encapsulate `args` using `%{}` notation and use `"""` around arguments with spaces:
 
-    my_path_with_spaces = 'C:/path/with spaces to/my-executable.jar
+    my_path_with_spaces = 'C:/path/with spaces to/my-executable.jar'
     nssm 'service name' do
-      program 'C:\\Windows\\System32\\java.exe'
-      args %Q{-jar """#{my_path_with_spaces}"""}
+      program 'C:\Program Files\Java\jdk1.7.0_67\bin\java.exe'
+      args %{-jar """#{my_path_with_spaces}"""}
       action :install
     end
 

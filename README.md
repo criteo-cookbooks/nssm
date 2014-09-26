@@ -3,9 +3,11 @@
 [![Build Status](https://travis-ci.org/dhoer/chef-nssm.svg)](https://travis-ci.org/dhoer/chef-nssm)
 
 This cookbook installs the Non-Sucking Service Manager (http://nssm.cc), and exposes resources to `install` and `remove` Windows services.
-Read [TLDR](https://github.com/dhoer/chef-nssm/blob/master/TLDR.md) for more details about usage, chefspec matchers, getting help and contributing.
+Read [TLDR](https://github.com/dhoer/chef-nssm/blob/master/TLDR.md) for more details about usage, chefspec matchers, getting help, and contributing.
 
 ## Requirements
+
+Chef 11.14.2 and Ruby 1.9.3 or higher.
 
 ### Platform
 

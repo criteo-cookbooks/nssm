@@ -16,7 +16,7 @@ action :install do
 
   batch "Install #{new_resource.servicename} service" do
     code <<-EOH
-      nssm install "#{new_resource.servicename}" #{new_resource.program} #{new_resource.args}
+      nssm install "#{new_resource.servicename}" "#{new_resource.program}" #{new_resource.args}
     EOH
     not_if { service_installed }
   end

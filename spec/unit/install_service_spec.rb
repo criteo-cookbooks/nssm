@@ -21,7 +21,7 @@ describe 'nssm_test::install_service' do
 
   it 'executes batch command to install service' do
     expect(chef_run).to run_batch('Install service name service').with(
-      code: %r{nssm install "service name" C:\\Windows\\System32\\java.exe -jar C:/path/to/my-executable.jar}
+      code: %r{nssm install "service name" "C:\\Windows\\System32\\java.exe" -jar C:/path/to/my-executable.jar}
     )
   end
 
