@@ -25,6 +25,30 @@ describe 'nssm_test::install_service' do
     )
   end
 
+  it 'sets start directory parameters' do
+    expect(chef_run).to run_batch('Set parameter AppDirectory C:/path/to').with(
+      code: %r{nssm set "service name" AppDirectory C:/path/to}
+    )
+  end
+
+  it 'sets service parameters' do
+    expect(chef_run).to run_batch('Set parameter AppStdout C:/path/to/log/service.log').with(
+      code: %r{nssm set "service name" AppStdout C:/path/to/log/service.log}
+    )
+  end
+
+  it 'sets service parameters' do
+    expect(chef_run).to run_batch('Set parameter AppStderr C:/path/to/log/error.log').with(
+      code: %r{nssm set "service name" AppStderr C:/path/to/log/error.log}
+    )
+  end
+
+  it 'sets service parameters' do
+    expect(chef_run).to run_batch('Set parameter AppRotateFiles 1').with(
+      code: /nssm set "service name" AppRotateFiles 1/
+    )
+  end
+
   it 'starts service' do
     expect(chef_run).to start_service('service name')
   end

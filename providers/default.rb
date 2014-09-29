@@ -21,6 +21,14 @@ action :install do
     not_if { service_installed }
   end
 
+  new_resource.params.map do |k, v|
+    batch "Set parameter #{k} #{v}"  do
+      code <<-EOH
+        nssm set "#{new_resource.servicename}" #{k} #{v}
+      EOH
+    end
+  end unless service_installed
+
   if new_resource.start
     service new_resource.servicename do
       action [:start]
