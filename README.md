@@ -24,33 +24,39 @@ Add `recipe[nssm]` to a run list.
 
 To install a Windows service:
 
-    nssm 'service name' do
-      program 'C:\Windows\System32\java.exe'
-      args '-jar C:/path/to/my-executable.jar'
-      action :install
-    end
+```ruby
+nssm 'service name' do
+  program 'C:\Windows\System32\java.exe'
+  args '-jar C:/path/to/my-executable.jar'
+  action :install
+end
+```
 
 To remove a Windows service:
 
-    nssm 'service name' do
-      action :remove
-    end
+```ruby
+nssm 'service name' do
+  action :remove
+end
+```
 
 ### Using Parameters
 
-A parameter is a hash key representing the same name as the registry entry which controls the associated functionality. So, for example, the following sets the startup directory for a service:
+A parameter is a hash key representing the same name as the registry entry which controls the associated functionality. So, for example, the following sets the Startup directory, I/O redirection, and File rotation for a service:
 
-    nssm 'service name' do
-      program 'C:\Windows\System32\java.exe'
-      args '-jar C:/path/to/my-executable.jar'
-      params(
-        AppDirectory: 'C:/path/to',
-        AppStdout: 'C:/path/to/log/service.log',
-        AppStderr: 'C:/path/to/log/error.log',
-        AppRotateFiles: 1
-      )
-      action :install
-    end
+```ruby
+nssm 'service name' do
+  program 'C:\Windows\System32\java.exe'
+  args '-jar C:/path/to/my-executable.jar'
+  params(
+    AppDirectory: 'C:/path/to',
+    AppStdout: 'C:/path/to/log/service.log',
+    AppStderr: 'C:/path/to/log/error.log',
+    AppRotateFiles: 1
+  )
+  action :install
+end
+```
 
 ### Arguments with Spaces
 
@@ -58,20 +64,24 @@ Having spaces in `servicename`, `program` and `params` attributes is not a probl
 
 When dealing with an argument containing spaces, surround it with [3 double quotes](http://stackoverflow.com/a/15262019):
 
-    nssm 'service name' do
-      program 'C:\Program Files\Java\jdk1.7.0_67\bin\java.exe'
-      args '-jar """C:/path/with spaces to/my-executable.jar"""'
-      action :install
-    end
+```ruby
+nssm 'service name' do
+  program 'C:\Program Files\Java\jdk1.7.0_67\bin\java.exe'
+  args '-jar """C:/path/with spaces to/my-executable.jar"""'
+  action :install
+end
+```
     
 When dealing with arguments requiring [interpolation](http://en.wikibooks.org/wiki/Ruby_Programming/Syntax/Literals#Interpolation) and it contains one or more arguments with spaces, then encapsulate the `args` string using `%()` notation and use `"""` around arguments with spaces:
 
-    my_path_with_spaces = 'C:/path/with spaces to/my-executable.jar'
-    nssm 'service name' do
-      program 'C:\Program Files\Java\jdk1.7.0_67\bin\java.exe'
-      args %(-jar """#{my_path_with_spaces}""")
-      action :install
-    end
+```ruby
+my_path_with_spaces = 'C:/path/with spaces to/my-executable.jar'
+nssm 'service name' do
+  program 'C:\Program Files\Java\jdk1.7.0_67\bin\java.exe'
+  args %(-jar """#{my_path_with_spaces}""")
+  action :install
+end
+```
 
 ### Attributes
 
@@ -99,10 +109,12 @@ The NSSM cookbook includes custom [ChefSpec](https://github.com/sethvargo/chefsp
 
 Example Matcher Usage
 
-    expect(chef_run).to install_nssm_service('service name').with(
-      :program 'C:\\Windows\\System32\\java.exe'
-      :args '-jar C:/path/to/my-executable.jar'    
-    )
+```ruby
+expect(chef_run).to install_nssm_service('service name').with(
+  :program 'C:\\Windows\\System32\\java.exe'
+  :args '-jar C:/path/to/my-executable.jar'    
+)
+```
       
 NSSM Cookbook Matchers
 
