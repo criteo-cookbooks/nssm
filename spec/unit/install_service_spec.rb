@@ -13,7 +13,7 @@ describe 'nssm_test::install_service' do
   end
 
   it 'calls nssm install resource' do
-    expect(chef_run).to install_nssm_service('service name').with(
+    expect(chef_run).to install_nssm('service name').with(
       program: 'C:\\Windows\\System32\\java.exe',
       args: '-jar C:/path/to/my-executable.jar'
     )

@@ -13,7 +13,7 @@ describe 'nssm_test::remove_service' do
   end
 
   it 'calls nssm remove resource' do
-    expect(chef_run).to remove_nssm_service('service name')
+    expect(chef_run).to remove_nssm('service name')
   end
 
   it 'executes batch command to remove service' do

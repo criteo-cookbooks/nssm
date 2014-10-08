@@ -110,7 +110,7 @@ The NSSM cookbook includes custom [ChefSpec](https://github.com/sethvargo/chefsp
 Example Matcher Usage
 
 ```ruby
-expect(chef_run).to install_nssm_service('service name').with(
+expect(chef_run).to install_nssm('service name').with(
   :program 'C:\\Windows\\System32\\java.exe'
   :args '-jar C:/path/to/my-executable.jar'    
 )
@@ -118,8 +118,8 @@ expect(chef_run).to install_nssm_service('service name').with(
       
 NSSM Cookbook Matchers
 
-- install_nssm_service(servicename)
-- remove_nssm_service(servicename)
+- install_nssm(servicename)
+- remove_nssm(servicename)
 
 ## Getting Help
 
