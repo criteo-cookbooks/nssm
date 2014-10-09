@@ -1,1 +1,2 @@
-* Dennis Hoer <dennis.hoer@gmail.com>
+* Dennis Hoer 
+* Sean Coyne

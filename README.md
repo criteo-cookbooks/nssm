@@ -111,7 +111,7 @@ Example Matcher Usage
 
 ```ruby
 expect(chef_run).to install_nssm('service name').with(
-  :program 'C:\\Windows\\System32\\java.exe'
+  :program 'C:\Windows\System32\java.exe'
   :args '-jar C:/path/to/my-executable.jar'    
 )
 ```
