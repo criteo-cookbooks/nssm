@@ -10,7 +10,7 @@ Chef 11.14.2 and Ruby 1.9.3 or higher.
 
 ### Platform
 
-- Windows Server 2012 R2
+- Windows
 
 ### Cookbooks
 
