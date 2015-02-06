@@ -4,8 +4,8 @@ maintainer_email 'dennis.hoer@gmail.com'
 license 'All rights reserved'
 description 'Installs/Configures NSSM'
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
-version '1.0.0'
+version '1.1.0'
 
 supports 'windows'
 
-depends 'windows'
+depends 'windows', '~> 1.0'

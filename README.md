@@ -106,16 +106,16 @@ checksum.
 
 #### Actions
 
-- :install: Install a Windows service.
-- :remove: Remove Windows service.
+- `install` - Install a Windows service.
+- `remove` - Remove Windows service.
 
 #### Attribute Parameters
 
-- :servicename: Name attribute. The name of the Windows service.
-- :program: The program to be run as a service. 
-- :args: String of arguments for the program. Optional
-- :params: Hash of key value pairs where key represents associated registry entry. Optional 
-- :start: Start service after installing. Default: true
+- `servicename` - Name attribute. The name of the Windows service.
+- `program` - The program to be run as a service.
+- `args` - String of arguments for the program. Optional
+- `params` - Hash of key value pairs where key represents associated registry entry. Optional
+- `start` - Start service after installing. Default` -  true
 
 ## ChefSpec Matchers
 

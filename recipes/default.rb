@@ -15,7 +15,8 @@ if platform?('windows')
 
   batch 'copy_nssm' do
     code <<-EOH
-      xcopy #{Chef::Config[:file_cache_path].gsub('/', '\\')}\\#{basename}\\#{system}\\nssm.exe "#{node['nssm']['install_location']}" /y
+      xcopy #{Chef::Config[:file_cache_path].gsub('/', '\\')}\\#{basename}\\#{system}\\nssm.exe \
+"#{node['nssm']['install_location']}" /y
     EOH
     not_if { ::File.exist?('c:\\windows\\nssm.exe') }
   end

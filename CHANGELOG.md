@@ -1,5 +1,9 @@
 # NSSM CHANGELOG
 
+## 1.1.0
+
+- Add an attribute for the install location of nssm.exe
+
 ## 1.0.0
 
 - Remove deprecated matchers
