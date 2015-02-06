@@ -2,11 +2,14 @@
 
 [![Cookbook Version](http://img.shields.io/cookbook/v/nssm.svg?style=flat-square)][cookbook]
 [![Build Status](http://img.shields.io/travis/dhoer/chef-nssm.svg?style=flat-square)][travis]
+[![GitHub Issues](http://img.shields.io/github/issues/dhoer/chef-nssm.svg?style=flat-square)][github]
 
 [cookbook]: https://supermarket.chef.io/cookbooks/nssm
 [travis]: https://travis-ci.org/dhoer/chef-nssm
+[github]: https://github.com/dhoer/chef-nssm/issues
 
-This cookbook installs the Non-Sucking Service Manager (http://nssm.cc), and exposes resources to `install` and `remove` Windows services.
+This cookbook installs the Non-Sucking Service Manager (http://nssm.cc), and exposes resources to `install`
+and `remove` Windows services.
 
 ## Requirements
 
@@ -46,7 +49,8 @@ end
 
 ### Using Parameters
 
-A parameter is a hash key representing the same name as the registry entry which controls the associated functionality. So, for example, the following sets the Startup directory, I/O redirection, and File rotation for a service:
+A parameter is a hash key representing the same name as the registry entry which controls the associated functionality.
+So, for example, the following sets the Startup directory, I/O redirection, and File rotation for a service:
 
 ```ruby
 nssm 'service name' do
@@ -64,9 +68,11 @@ end
 
 ### Arguments with Spaces
 
-Having spaces in `servicename`, `program` and `params` attributes is not a problem, but spaces in an argument is a different matter.
+Having spaces in `servicename`, `program` and `params` attributes is not a problem, but spaces in an argument is a
+different matter.
 
-When dealing with an argument containing spaces, surround it with [3 double quotes](http://stackoverflow.com/a/15262019):
+When dealing with an argument containing spaces, surround it
+with [3 double quotes](http://stackoverflow.com/a/15262019):
 
 ```ruby
 nssm 'service name' do
@@ -76,7 +82,10 @@ nssm 'service name' do
 end
 ```
     
-When dealing with arguments requiring [interpolation](http://en.wikibooks.org/wiki/Ruby_Programming/Syntax/Literals#Interpolation) and it contains one or more arguments with spaces, then encapsulate the `args` string using `%()` notation and use `"""` around arguments with spaces:
+When dealing with arguments requiring
+[interpolation](http://en.wikibooks.org/wiki/Ruby_Programming/Syntax/Literals#Interpolation) and it contains one or
+more arguments with spaces, then encapsulate the `args` string using `%()` notation and use `"""` around arguments
+with spaces:
 
 ```ruby
 my_path_with_spaces = 'C:/path/with spaces to/my-executable.jar'
@@ -90,7 +99,8 @@ end
 ### Attributes
 
 - `node['nssm']['src']` - This can either be a URI or a local path to nssm zip.
-- `node['nssm']['sha256']` - SHA-256 checksum of the file. Chef will not download it if the local file matches the checksum.
+- `node['nssm']['sha256']` - SHA-256 checksum of the file. Chef will not download it if the local file matches the
+checksum.
 
 ### Resource/Provider
 
@@ -109,7 +119,8 @@ end
 
 ## ChefSpec Matchers
 
-The NSSM cookbook includes custom [ChefSpec](https://github.com/sethvargo/chefspec) matchers you can use to test your own cookbooks that consume Windows cookbook LWRPs.
+The NSSM cookbook includes custom [ChefSpec](https://github.com/sethvargo/chefspec) matchers you can use to test your
+own cookbooks that consume Windows cookbook LWRPs.
 
 Example Matcher Usage
 
