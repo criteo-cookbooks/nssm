@@ -19,7 +19,7 @@ end
 
 action :install do
   if platform?('windows')
-    install_nssm
+    install_nssm unless ::Nssm.installed?(node['nssm']['install_location'])
     nssm_bin = ::Nssm.binary_path node['nssm']['install_location']
 
     service_installed = service_installed?(new_resource.servicename)
