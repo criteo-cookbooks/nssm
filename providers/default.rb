@@ -32,7 +32,7 @@ action :install do
     end
 
     new_resource.params.map do |k, v|
-      batch "Set parameter #{k} #{v}"  do
+      batch "Set parameter #{k} #{v}" do
         code <<-EOH
           #{nssm_bin} set "#{new_resource.servicename}" #{k} #{v}
         EOH
