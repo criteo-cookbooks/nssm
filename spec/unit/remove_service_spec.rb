@@ -21,7 +21,7 @@ describe 'nssm_test::remove_service' do
 
     it 'executes batch command to remove service' do
       expect(chef_run).to run_batch('Remove service service name').with(
-        code: /nssm remove "service name" confirm/
+        code: /%WINDIR%\\nssm.exe remove "service name" confirm/
       )
     end
   end

@@ -24,31 +24,31 @@ describe 'nssm_test::install_service' do
 
     it 'executes batch command to install service' do
       expect(chef_run).to run_batch('Install service name service').with(
-        code: %r{nssm install "service name" "C:\\Windows\\System32\\java.exe" -jar C:/path/to/my-executable.jar}
+        code: %r{%WINDIR%\\nssm.exe install "service name" "C:\\Windows\\System32\\java.exe" -jar C:/path/to}
       )
     end
 
     it 'sets start directory parameters' do
       expect(chef_run).to run_batch('Set parameter AppDirectory C:/path/to').with(
-        code: %r{nssm set "service name" AppDirectory C:/path/to}
+        code: %r{%WINDIR%\\nssm.exe set "service name" AppDirectory C:/path/to}
       )
     end
 
     it 'sets service parameters' do
       expect(chef_run).to run_batch('Set parameter AppStdout C:/path/to/log/service.log').with(
-        code: %r{nssm set "service name" AppStdout C:/path/to/log/service.log}
+        code: %r{%WINDIR%\\nssm.exe set "service name" AppStdout C:/path/to/log/service.log}
       )
     end
 
     it 'sets service parameters' do
       expect(chef_run).to run_batch('Set parameter AppStderr C:/path/to/log/error.log').with(
-        code: %r{nssm set "service name" AppStderr C:/path/to/log/error.log}
+        code: %r{%WINDIR%\\nssm.exe set "service name" AppStderr C:/path/to/log/error.log}
       )
     end
 
     it 'sets service parameters' do
       expect(chef_run).to run_batch('Set parameter AppRotateFiles 1').with(
-        code: /nssm set "service name" AppRotateFiles 1/
+        code: /%WINDIR%\\nssm.exe set "service name" AppRotateFiles 1/
       )
     end
 

@@ -1,7 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'foodcritic'
-gem 'rubocop'
-gem 'chefspec'
-gem 'berkshelf'
-gem 'travis-lint'
+gem 'foodcritic', '~> 4.0'
+gem 'rubocop', '~> 0.33'
+gem 'chefspec', '~> 4.3'
+gem 'berkshelf', '~> 3.1.5'

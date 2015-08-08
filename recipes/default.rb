@@ -2,7 +2,7 @@ if platform?('windows')
   src = node['nssm']['src']
   basename = src.slice(src.rindex('/') + 1, src.rindex('.') - src.rindex('/') - 1)
 
-  log "nssm_basename=#{basename}"
+  log("nssm_basename=#{basename}")
 
   windows_zipfile Chef::Config[:file_cache_path] do
     checksum node['nssm']['sha256']
@@ -18,10 +18,8 @@ if platform?('windows')
       xcopy #{Chef::Config[:file_cache_path].tr('/', '\\')}\\#{basename}\\#{system}\\nssm.exe \
 "#{node['nssm']['install_location']}" /y
     EOH
-    not_if { ::Nssm.installed? node['nssm']['install_location'] }
+    not_if { ::File.exist?("#{node['nssm']['install_location']}\\nssm.exe") }
   end
 else
-  log 'NSSM can only be installed on Windows platforms!' do
-    level :warn
-  end
+  log('NSSM can only be installed on Windows platforms!') { level :warn }
 end

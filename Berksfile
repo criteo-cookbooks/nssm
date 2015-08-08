@@ -1,5 +1,7 @@
-source 'https://supermarket.getchef.com'
+source 'https://supermarket.chef.io'
 
 metadata
 
-cookbook 'nssm_test', path: 'test/fixtures/cookbooks/nssm_test'
+group :solo do
+  cookbook 'nssm_test', path: 'test/fixtures/cookbooks/nssm_test'
+end

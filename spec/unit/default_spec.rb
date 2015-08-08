@@ -2,7 +2,9 @@ require 'spec_helper'
 
 describe 'nssm::default' do
   context 'windows' do
-    let(:chef_run) { ChefSpec::SoloRunner.new(platform: 'windows', version: '2008R2').converge(described_recipe) }
+    let(:chef_run) do
+      ChefSpec::SoloRunner.new(platform: 'windows', version: '2008R2').converge(described_recipe)
+    end
 
     it 'determines basename from url' do
       expect(chef_run).to write_log('nssm_basename=nssm-2.24')
@@ -15,7 +17,7 @@ describe 'nssm::default' do
 
     it 'copies nssm executable' do
       expect(chef_run).to run_batch('copy_nssm').with(
-        code: %r{xcopy .*\\nssm-2.24\\win64\\nssm.exe "%WINDIR%" \/y/})
+        code: %r{xcopy .*\\nssm-2.24\\win64\\nssm.exe "%WINDIR%" /y})
     end
   end
 
