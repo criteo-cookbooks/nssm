@@ -9,6 +9,6 @@ describe 'nssm::default' do
 
   it 'copies nssm executable' do
     expect(chef_run).to run_batch('copy_nssm').with(
-      code: /xcopy .*\\nssm-2.24\\win64\\nssm.exe "c:\\somewhere" \/y/)
+      code: %r{xcopy .*\\nssm-2.24\\win64\\nssm.exe "c:\\somewhere" \/y})
   end
 end

@@ -19,21 +19,22 @@ end
 
 action :install do
   if platform?('windows')
-    install_nssm
+    install_nssm unless ::Nssm.installed?(node['nssm']['install_location'])
+    nssm_bin = ::Nssm.binary_path node['nssm']['install_location']
 
     service_installed = service_installed?(new_resource.servicename)
 
     batch "Install #{new_resource.servicename} service" do
       code <<-EOH
-        nssm install "#{new_resource.servicename}" "#{new_resource.program}" #{new_resource.args}
+        #{nssm_bin} install "#{new_resource.servicename}" "#{new_resource.program}" #{new_resource.args}
       EOH
       not_if { service_installed }
     end
 
     new_resource.params.map do |k, v|
-      batch "Set parameter #{k} #{v}"  do
+      batch "Set parameter #{k} #{v}" do
         code <<-EOH
-          nssm set "#{new_resource.servicename}" #{k} #{v}
+          #{nssm_bin} set "#{new_resource.servicename}" #{k} #{v}
         EOH
       end
     end unless service_installed
@@ -59,7 +60,7 @@ action :remove do
 
     batch "Remove service #{new_resource.servicename}" do
       code <<-EOH
-        nssm remove "#{new_resource.servicename}" confirm
+        #{nssm_bin} remove "#{new_resource.servicename}" confirm
       EOH
       only_if { service_installed }
     end
