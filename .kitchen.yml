@@ -12,7 +12,7 @@ platforms:
       box: dhoer/windows-2012r2
 
 suites:
-  - name: selenium_test
+  - name: nssm_test
     run_list:
       - recipe[nssm_test::install_service]
     attributes:
