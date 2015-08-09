@@ -13,7 +13,7 @@ and `remove` Windows services.
 
 ## Requirements
 
-Chef 11.14.2 and Ruby 1.9.3 or higher.
+- Chef 11 or higher
 
 ### Platform
 
@@ -25,7 +25,7 @@ Chef 11.14.2 and Ruby 1.9.3 or higher.
 
 ## Usage
 
-Add `recipe[nssm]` to a run list.
+Add `recipe[nssm]` to run list.
 
 ### Quick Start
 

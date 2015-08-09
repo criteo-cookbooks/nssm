@@ -3,7 +3,10 @@ require 'spec_helper'
 describe 'nssm_test::install_service' do
   context 'windows' do
     let(:chef_run) do
-      ChefSpec::SoloRunner.new(platform: 'windows', version: '2008R2', step_into: ['nssm']).converge(described_recipe)
+      ChefSpec::SoloRunner.new(
+        file_cache_path: 'C:\chef\cache', platform: 'windows', version: '2008R2', step_into: ['nssm']) do |node|
+        node.set['java']['windows']['url'] = 'http://path/to/java.exe'
+      end.converge(described_recipe)
     end
 
     let(:fake_class) { Class.new }
@@ -17,32 +20,33 @@ describe 'nssm_test::install_service' do
 
     it 'calls nssm install resource' do
       expect(chef_run).to install_nssm('service name').with(
-        program: 'C:\\Windows\\System32\\java.exe',
-        args: '-jar C:/path/to/my-executable.jar'
+        program: 'C:\\Program Files (x86)\\Java\\jdk1.8.0_51\\bin\\java.exe',
+        args: '-jar C:\\chef\\cache\\selenium-server-standalone-2.47.1.jar'
       )
     end
 
     it 'executes batch command to install service' do
       expect(chef_run).to run_batch('Install service name service').with(
-        code: %r{%WINDIR%\\nssm.exe install "service name" "C:\\Windows\\System32\\java.exe" -jar C:/path/to}
+        code: /%WINDIR%\\nssm.exe install "service name" ".*\\Java\\jdk1.8.0_51\\bin\\java.exe" \
+-jar C:\\chef\\cache\\selenium-server-standalone-2.47.1.jar/
       )
     end
 
     it 'sets start directory parameters' do
-      expect(chef_run).to run_batch('Set parameter AppDirectory C:/path/to').with(
-        code: %r{%WINDIR%\\nssm.exe set "service name" AppDirectory C:/path/to}
+      expect(chef_run).to run_batch('Set parameter AppDirectory C:\\chef\\cache').with(
+        code: /%WINDIR%\\nssm.exe set "service name" AppDirectory C:\\chef\\cache/
       )
     end
 
     it 'sets service parameters' do
-      expect(chef_run).to run_batch('Set parameter AppStdout C:/path/to/log/service.log').with(
-        code: %r{%WINDIR%\\nssm.exe set "service name" AppStdout C:/path/to/log/service.log}
+      expect(chef_run).to run_batch('Set parameter AppStdout C:\\chef\\cache\\service.log').with(
+        code: /%WINDIR%\\nssm.exe set "service name" AppStdout C:\\chef\\cache\\service.log/
       )
     end
 
     it 'sets service parameters' do
-      expect(chef_run).to run_batch('Set parameter AppStderr C:/path/to/log/error.log').with(
-        code: %r{%WINDIR%\\nssm.exe set "service name" AppStderr C:/path/to/log/error.log}
+      expect(chef_run).to run_batch('Set parameter AppStderr C:\\chef\\cache\\error.log').with(
+        code: /%WINDIR%\\nssm.exe set "service name" AppStderr C:\\chef\\cache\\error.log/
       )
     end
 

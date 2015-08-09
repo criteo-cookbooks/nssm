@@ -18,9 +18,8 @@ if platform?('windows')
       xcopy "#{Chef::Config[:file_cache_path].tr('/', '\\')}\\#{basename}\\#{system}\\nssm.exe" \
 "#{node['nssm']['install_location']}" /y
     EOH
-    not_if { ::File.exist?("#{node['nssm']['install_location']}\\nssm.exe".gsub(/%[^%]+%/) { |m| ENV[m[1..-2]] } ) }
+    not_if { ::File.exist?("#{node['nssm']['install_location']}\\nssm.exe".gsub(/%[^%]+%/) { |m| ENV[m[1..-2]] }) }
   end
 else
   log('NSSM can only be installed on Windows platforms!') { level :warn }
 end
-
