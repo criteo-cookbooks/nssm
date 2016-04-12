@@ -4,9 +4,11 @@ describe 'nssm_test::install_service' do
   context 'windows' do
     let(:chef_run) do
       ChefSpec::SoloRunner.new(
-        file_cache_path: 'C:\chef\cache', platform: 'windows', version: '2008R2', step_into: ['nssm']) do |node|
-        node.set['java']['windows']['url'] = 'http://path/to/java.exe'
-      end.converge(described_recipe)
+        file_cache_path: 'C:\chef\cache',
+        platform: 'windows',
+        version: '2008R2',
+        step_into: ['nssm']
+      ).converge(described_recipe)
     end
 
     let(:fake_class) { Class.new }
@@ -16,19 +18,20 @@ describe 'nssm_test::install_service' do
       obj = double
       allow(obj).to receive(:ExecQuery) { [] }
       allow(fake_class).to receive(:connect) { obj }
+      ENV['SYSTEMDRIVE'] = 'C:'
     end
 
     it 'calls nssm install resource' do
       expect(chef_run).to install_nssm('service name').with(
-        program: 'C:\\Program Files (x86)\\Java\\jdk1.8.0_51\\bin\\java.exe',
-        args: '-jar C:\\chef\\cache\\selenium-server-standalone-2.47.1.jar'
+        program: 'C:\\java\\bin\\java.exe',
+        args: '-jar C:\\chef\\cache\\selenium-server-standalone-2.53.0.jar'
       )
     end
 
     it 'executes batch command to install service' do
       expect(chef_run).to run_batch('Install service name service').with(
-        code: /%WINDIR%\\nssm.exe install "service name" ".*\\Java\\jdk1.8.0_51\\bin\\java.exe" \
--jar C:\\chef\\cache\\selenium-server-standalone-2.47.1.jar/
+        code: /%WINDIR%\\nssm.exe install "service name" "C:\\java\\bin\\java.exe" \
+-jar C:\\chef\\cache\\selenium-server-standalone-2.53.0.jar/
       )
     end
 
