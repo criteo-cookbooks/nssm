@@ -1,4 +1,4 @@
-include_recipe 'java'
+include_recipe 'java_se'
 
 path = "#{Chef::Config[:file_cache_path]}\\selenium-server-standalone-2.47.1.jar"
 
