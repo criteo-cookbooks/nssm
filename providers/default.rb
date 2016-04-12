@@ -14,7 +14,7 @@ end
 def install_nssm
   recipe_eval do
     run_context.include_recipe 'nssm::default'
-  end
+  end unless run_context.loaded_recipe? 'nssm::default'
 end
 
 def nssm_exe
