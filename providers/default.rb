@@ -8,7 +8,7 @@ def execute_wmi_query(wmi_query)
 end
 
 def service_installed?(servicename)
-  !(execute_wmi_query("select * from Win32_Service where name = '#{servicename}'").nil?)
+  !execute_wmi_query("select * from Win32_Service where name = '#{servicename}'").nil?
 end
 
 def install_nssm
