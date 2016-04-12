@@ -1,13 +1,13 @@
 include_recipe 'java_se'
 
-path = "#{Chef::Config[:file_cache_path]}\\selenium-server-standalone-2.47.1.jar"
+path = "#{Chef::Config[:file_cache_path]}\\selenium-server-standalone-2.53.0.jar"
 
 remote_file path do
-  source 'http://selenium-release.storage.googleapis.com/2.47/selenium-server-standalone-2.47.1.jar'
+  source 'https://selenium-release.storage.googleapis.com/2.53/selenium-server-standalone-2.53.0.jar'
 end
 
 nssm 'service name' do
-  program 'C:\Program Files (x86)\Java\jdk1.8.0_51\bin\java.exe'
+  program "#{node['java_se']['win_javalink']}\\java.exe"
   args "-jar #{path}"
   params(
     AppDirectory: Chef::Config[:file_cache_path],
