@@ -16,9 +16,9 @@ environment:
 
 clone_folder: c:\projects\kitchen-machine
 clone_depth: 1
-branches:
-  except:
-    - macosx
+
+cache:
+  - vendor/bundle
 
 install:
   - ps: net user /add $env:machine_user $env:machine_pass
@@ -32,4 +32,4 @@ build_script:
   - bundle exec rake
 
 test_script:
-  - bundle exec kitchen verify windows
+  - bundle exec kitchen verify
