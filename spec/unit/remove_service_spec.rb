@@ -9,10 +9,16 @@ describe 'nssm_test::remove_service' do
     let(:fake_class) { Class.new }
 
     before do
-      stub_const('::WIN32OLE', fake_class)
       obj = double
-      allow(obj).to receive(:ExecQuery) { [''] }
-      allow(fake_class).to receive(:connect) { obj }
+      if ENV['APPVEYOR']
+        require 'win32ole'
+        allow(WIN32OLE).to receive(:connect).with('winmgmts://').and_return(obj)
+      else
+        stub_const('::WIN32OLE', fake_class)
+        allow(fake_class).to receive(:connect).and_return(obj)
+      end
+      allow(obj).to receive(:ExecQuery).and_return([''])
+      ENV['SYSTEMDRIVE'] = 'C:'
     end
 
     it 'calls nssm remove resource' do
