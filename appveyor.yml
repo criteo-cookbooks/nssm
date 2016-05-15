@@ -33,6 +33,7 @@ build_script:
   - bundle exec rubocop
   - bundle exec foodcritic --version
   - bundle exec foodcritic . --exclude spec -f any
+  - bundle exec rspec
 
 test_script:
   - bundle exec kitchen verify

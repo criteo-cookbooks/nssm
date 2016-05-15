@@ -5,12 +5,11 @@ use_inline_resources
 def execute_wmi_query(wmi_query)
   wmi = ::WIN32OLE.connect('winmgmts://')
   result = wmi.ExecQuery(wmi_query)
-  return nil unless result.each.count > 0
-  result
+  result.each.count > 0
 end
 
 def service_installed?(servicename)
-  !execute_wmi_query("select * from Win32_Service where name = '#{servicename}'").nil?
+  execute_wmi_query("select * from Win32_Service where name = '#{servicename}'")
 end
 
 def install_nssm
