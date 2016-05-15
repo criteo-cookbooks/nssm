@@ -1,6 +1,0 @@
-language: ruby
-rvm:
-  - "2.0.0"
-  - "2.2.4"
-
-bundler_args: --without integration

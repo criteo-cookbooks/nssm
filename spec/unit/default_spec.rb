@@ -14,12 +14,14 @@ describe 'nssm::default' do
 
     it 'downloads and unzips nssm' do
       expect(chef_run).to unzip_windows_zipfile_to(Chef::Config[:file_cache_path]).with(
-        source: 'http://nssm.cc/release/nssm-2.24.zip')
+        source: 'http://nssm.cc/release/nssm-2.24.zip'
+      )
     end
 
     it 'copies nssm executable' do
       expect(chef_run).to run_batch('copy_nssm').with(
-        code: %r{xcopy ".*\\nssm-2.24\\win64\\nssm.exe" "%WINDIR%" /y})
+        code: %r{xcopy ".*\\nssm-2.24\\win64\\nssm.exe" "%WINDIR%" /y}
+      )
     end
   end
 

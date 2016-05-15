@@ -14,5 +14,5 @@ platforms:
 suites:
   - name: nssm_test
     run_list:
-      - recipe[nssm_test::install_service]
+      - nssm_test::install_service
     attributes:
