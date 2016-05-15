@@ -23,8 +23,8 @@ describe 'nssm_test::install_service' do
 
     it 'calls nssm install resource' do
       expect(chef_run).to install_nssm('service name').with(
-        program: 'C:\\java\\bin\\java.exe',
-        args: '-jar C:\\chef\\cache\\selenium-server-standalone-2.53.0.jar'
+        program: 'C:\java\bin\java.exe',
+        args: '-jar C:\chef\cache\selenium-server-standalone-2.53.0.jar'
       )
     end
 
