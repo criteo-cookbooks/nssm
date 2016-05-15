@@ -17,9 +17,6 @@ environment:
 clone_folder: c:\projects\kitchen-machine
 clone_depth: 1
 
-cache:
-  - c:/projects/kitchen-machine/vendor/bundle
-
 install:
   - ps: net user /add $env:machine_user $env:machine_pass
   - ps: net localgroup administrators $env:machine_user /add
@@ -28,7 +25,7 @@ install:
   - ps: Invoke-WebRequest -Uri http://curl.haxx.se/ca/cacert.pem -OutFile c:\projects\kitchen-machine\certs.pem
 
 build_script:
-  - bundle install || bundle install || bundle install
+  - bundle package
   - bundle exec rake
 
 test_script:
