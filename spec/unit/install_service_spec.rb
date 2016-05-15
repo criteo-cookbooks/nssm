@@ -14,9 +14,13 @@ describe 'nssm_test::install_service' do
     let(:fake_class) { Class.new }
 
     before do
-      stub_const('::WIN32OLE', fake_class)
+      require 'win32ole'
       obj = double
-      allow(fake_class).to receive(:connect) { obj }
+      allow(WIN32OLE).to receive(:connect).with("winmgmts://").and_return(obj)
+
+      # stub_const('::WIN32OLE', fake_class)
+
+      # allow(fake_class).to receive(:connect) { obj }
       allow(obj).to receive(:ExecQuery) { [] }
       ENV['SYSTEMDRIVE'] = 'C:'
     end
