@@ -16,7 +16,7 @@ describe 'nssm_test::install_service' do
     before do
       require 'win32ole'
       obj = double
-      allow(WIN32OLE).to receive(:connect).with("winmgmts://").and_return(obj)
+      allow(WIN32OLE).to receive(:connect).with('winmgmts://').and_return(obj)
 
       # stub_const('::WIN32OLE', fake_class)
 
