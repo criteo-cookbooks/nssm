@@ -10,7 +10,7 @@ describe 'nssm_test::remove_service' do
 
     before do
       obj = double
-      if ENV['APPVEYOR']
+      if ENV['APPVEYOR'] # Fix ArgumentError: wrong number of arguments (1 for 0)
         require 'win32ole'
         allow(WIN32OLE).to receive(:connect).with('winmgmts://').and_return(obj)
       else
