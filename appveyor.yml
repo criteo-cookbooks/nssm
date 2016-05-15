@@ -29,7 +29,10 @@ install:
 
 build_script:
   - bundle install || bundle install || bundle install
-  - bundle exec rake
+  - bundle exec rubocop --version
+  - bundle exec rubocop
+  - bundle exec foodcritic --version
+  - bundle exec foodcritic . --exclude spec -f any
 
 test_script:
   - bundle exec kitchen verify

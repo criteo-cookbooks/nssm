@@ -15,7 +15,6 @@ describe 'nssm_test::install_service' do
 
     before do
       stub_const('::WIN32OLE', fake_class)
-      stub_const('::WIN32OLE_VARIANT', fake_class)
       obj = double
       allow(obj).to receive(:ExecQuery) { [] }
       allow(fake_class).to receive(:connect) { obj }
