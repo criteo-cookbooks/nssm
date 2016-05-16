@@ -20,7 +20,7 @@ describe 'nssm_test::install_service' do
         allow(WIN32OLE).to receive(:connect).with('winmgmts://').and_return(obj)
       else
         stub_const('::WIN32OLE', fake_class)
-        allow(fake_class).to receive(:connect).and_return(obj)
+        allow(fake_class).to receive(:connect).with('winmgmts://').and_return(obj)
       end
       allow(obj).to receive(:ExecQuery).and_return([])
       ENV['SYSTEMDRIVE'] = 'C:'
