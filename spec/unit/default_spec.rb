@@ -25,7 +25,7 @@ describe 'nssm::default' do
 
     it 'installs nssm' do
       expect(chef_run).to_not run_batch('install nssm').with(
-        code: %r{xcopy ".*\\nssm-2.24\\win64\\nssm.exe" "%WINDIR%" /y}
+        code: %r{xcopy ".*\\nssm-.*\\win64\\nssm.exe" "%WINDIR%" /y}
       )
     end
   end
