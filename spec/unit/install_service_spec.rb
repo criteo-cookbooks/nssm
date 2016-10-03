@@ -39,8 +39,8 @@ describe 'nssm_test::install_service' do
 
     it 'executes batch command to install service' do
       expect(chef_run).to run_batch('Install service name service').with(
-        code: /%WINDIR%\\nssm.exe install "service name" "C:\\java\\bin\\java.exe" \
--jar #{CACHE}\\selenium-server-standalone-2.53.0.jar/
+        code: '%WINDIR%\\nssm.exe install "service name" "C:\\java\\bin\\java.exe"' \
+          " -jar #{CACHE}\\selenium-server-standalone-2.53.0.jar"
       )
     end
 
@@ -50,19 +50,19 @@ describe 'nssm_test::install_service' do
       )
     end
 
-    it 'sets service parameters' do
+    it 'sets stdout log' do
       expect(chef_run).to run_batch("Set parameter AppStdout #{CACHE}\\service.log").with(
         code: /%WINDIR%\\nssm.exe set "service name" AppStdout #{CACHE}\\service.log/
       )
     end
 
-    it 'sets service parameters' do
+    it 'sets stderr log' do
       expect(chef_run).to run_batch("Set parameter AppStderr #{CACHE}\\error.log").with(
         code: /%WINDIR%\\nssm.exe set "service name" AppStderr #{CACHE}\\error.log/
       )
     end
 
-    it 'sets service parameters' do
+    it 'sets rotate files' do
       expect(chef_run).to run_batch('Set parameter AppRotateFiles 1').with(
         code: /%WINDIR%\\nssm.exe set "service name" AppRotateFiles 1/
       )
