@@ -1,5 +1,9 @@
 # NSSM CHANGELOG
 
+## 2.0.0 2016-10-03
+
+- Drop support for Chef 11
+
 ## 1.2.1 2016-04-12
 
 - Include default recipe in provide only if required

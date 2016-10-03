@@ -11,15 +11,11 @@ and `remove` Windows services.
 
 ## Requirements
 
-- Chef 11 or higher
+- Chef 12.6+
 
 ### Platform
 
 - Windows
-
-### Cookbooks
-
-- windows
 
 ## Usage
 

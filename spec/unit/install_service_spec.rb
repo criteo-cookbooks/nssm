@@ -4,7 +4,7 @@ describe 'nssm_test::install_service' do
   context 'windows' do
     let(:chef_run) do
       ChefSpec::SoloRunner.new(
-        file_cache_path: 'C:\chef\cache',
+        file_cache_path: CACHE,
         platform: 'windows',
         version: '2008R2',
         step_into: ['nssm']
@@ -26,35 +26,39 @@ describe 'nssm_test::install_service' do
       ENV['SYSTEMDRIVE'] = 'C:'
     end
 
+    it 'installs selenium' do
+      expect(chef_run).to create_remote_file("#{CACHE}\\selenium-server-standalone-2.53.0.jar")
+    end
+
     it 'calls nssm install resource' do
       expect(chef_run).to install_nssm('service name').with(
         program: 'C:\java\bin\java.exe',
-        args: '-jar C:\chef\cache\selenium-server-standalone-2.53.0.jar'
+        args: "-jar #{CACHE}\\selenium-server-standalone-2.53.0.jar"
       )
     end
 
     it 'executes batch command to install service' do
       expect(chef_run).to run_batch('Install service name service').with(
         code: /%WINDIR%\\nssm.exe install "service name" "C:\\java\\bin\\java.exe" \
--jar C:\\chef\\cache\\selenium-server-standalone-2.53.0.jar/
+-jar #{CACHE}\\selenium-server-standalone-2.53.0.jar/
       )
     end
 
     it 'sets start directory parameters' do
-      expect(chef_run).to run_batch('Set parameter AppDirectory C:\\chef\\cache').with(
-        code: /%WINDIR%\\nssm.exe set "service name" AppDirectory C:\\chef\\cache/
+      expect(chef_run).to run_batch("Set parameter AppDirectory #{CACHE}").with(
+        code: /%WINDIR%\\nssm.exe set "service name" AppDirectory #{CACHE}/
       )
     end
 
     it 'sets service parameters' do
-      expect(chef_run).to run_batch('Set parameter AppStdout C:\\chef\\cache\\service.log').with(
-        code: /%WINDIR%\\nssm.exe set "service name" AppStdout C:\\chef\\cache\\service.log/
+      expect(chef_run).to run_batch("Set parameter AppStdout #{CACHE}\\service.log").with(
+        code: /%WINDIR%\\nssm.exe set "service name" AppStdout #{CACHE}\\service.log/
       )
     end
 
     it 'sets service parameters' do
-      expect(chef_run).to run_batch('Set parameter AppStderr C:\\chef\\cache\\error.log').with(
-        code: /%WINDIR%\\nssm.exe set "service name" AppStderr C:\\chef\\cache\\error.log/
+      expect(chef_run).to run_batch("Set parameter AppStderr #{CACHE}\\error.log").with(
+        code: /%WINDIR%\\nssm.exe set "service name" AppStderr #{CACHE}\\error.log/
       )
     end
 
@@ -71,7 +75,13 @@ describe 'nssm_test::install_service' do
 
   context 'linux' do
     let(:chef_run) do
-      ChefSpec::SoloRunner.new(platform: 'centos', version: '7.0', step_into: ['nssm']).converge(described_recipe)
+      ChefSpec::SoloRunner.new(
+        file_cache_path: CACHE, platform: 'centos', version: '7.0', step_into: ['nssm']
+      ).converge(described_recipe)
+    end
+
+    it 'installs selenium' do
+      expect(chef_run).to create_remote_file("#{CACHE}\\selenium-server-standalone-2.53.0.jar")
     end
 
     it 'writes a log with warning' do
