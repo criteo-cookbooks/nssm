@@ -3,7 +3,7 @@ require 'spec_helper'
 describe 'nssm::default' do
   let(:chef_run) do
     ChefSpec::SoloRunner.new(file_cache_path: CACHE, platform: 'windows', version: '2008R2') do |node|
-      node.set['nssm']['install_location'] = 'c:\somewhere'
+      node.override['nssm']['install_location'] = 'c:\somewhere'
     end.converge(described_recipe)
   end
 
