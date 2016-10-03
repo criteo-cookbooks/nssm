@@ -18,12 +18,10 @@ if platform?('windows')
   end
 
   system = node['kernel']['machine'] == 'x86_64' ? 'win64' : 'win32'
+  system_dir = "#{Chef::Config[:file_cache_path].tr('/', '\\')}\\#{basename}\\#{system}\\nssm.exe"
 
   batch 'install nssm' do
-    code <<-EOH
-      xcopy "#{Chef::Config[:file_cache_path].tr('/', '\\')}\\#{basename}\\#{system}\\nssm.exe" \
-"#{node['nssm']['install_location']}" /y
-    EOH
+    code "xcopy \"#{system_dir}\" \"#{node['nssm']['install_location']}\" /y"
     action :nothing
   end
 else

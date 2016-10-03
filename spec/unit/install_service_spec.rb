@@ -46,25 +46,25 @@ describe 'nssm_test::install_service' do
 
     it 'sets start directory parameters' do
       expect(chef_run).to run_batch("Set parameter AppDirectory #{CACHE}").with(
-        code: /%WINDIR%\\nssm.exe set "service name" AppDirectory #{CACHE}/
+        code: "%WINDIR%\\nssm.exe set \"service name\" AppDirectory #{CACHE}"
       )
     end
 
     it 'sets stdout log' do
       expect(chef_run).to run_batch("Set parameter AppStdout #{CACHE}\\service.log").with(
-        code: /%WINDIR%\\nssm.exe set "service name" AppStdout #{CACHE}\\service.log/
+        code: "%WINDIR%\\nssm.exe set \"service name\" AppStdout #{CACHE}\\service.log"
       )
     end
 
     it 'sets stderr log' do
       expect(chef_run).to run_batch("Set parameter AppStderr #{CACHE}\\error.log").with(
-        code: /%WINDIR%\\nssm.exe set "service name" AppStderr #{CACHE}\\error.log/
+        code: "%WINDIR%\\nssm.exe set \"service name\" AppStderr #{CACHE}\\error.log"
       )
     end
 
     it 'sets rotate files' do
       expect(chef_run).to run_batch('Set parameter AppRotateFiles 1').with(
-        code: /%WINDIR%\\nssm.exe set "service name" AppRotateFiles 1/
+        code: '%WINDIR%\\nssm.exe set "service name" AppRotateFiles 1'
       )
     end
 
