@@ -13,9 +13,10 @@ def service_installed?(servicename)
 end
 
 def install_nssm
+  return if run_context.loaded_recipe? 'nssm::default'
   recipe_eval do
     run_context.include_recipe 'nssm::default'
-  end unless run_context.loaded_recipe? 'nssm::default'
+  end
 end
 
 def nssm_exe
@@ -25,7 +26,6 @@ end
 action :install do
   if platform?('windows')
     install_nssm
-
     service_installed = service_installed?(new_resource.servicename)
 
     batch "Install #{new_resource.servicename} service" do
@@ -33,11 +33,13 @@ action :install do
       not_if { service_installed }
     end
 
-    new_resource.params.map do |k, v|
-      batch "Set parameter #{k} #{v}" do
-        code "#{nssm_exe} set \"#{new_resource.servicename}\" #{k} #{v}"
+    unless service_installed
+      new_resource.params.map do |k, v|
+        batch "Set parameter #{k} #{v}" do
+          code "#{nssm_exe} set \"#{new_resource.servicename}\" #{k} #{v}"
+        end
       end
-    end unless service_installed
+    end
 
     if new_resource.start
       service new_resource.servicename do
