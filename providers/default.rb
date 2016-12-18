@@ -47,8 +47,6 @@ action :install do
         not_if { service_installed }
       end
     end
-
-    new_resource.updated_by_last_action(!service_installed)
   else
     log('NSSM service can only be installed on Windows platforms!') { level :warn }
   end
@@ -62,8 +60,6 @@ action :remove do
       code "#{nssm_exe} remove \"#{new_resource.servicename}\" confirm"
       only_if { service_installed }
     end
-
-    new_resource.updated_by_last_action(service_installed)
   else
     log('NSSM service can only be removed from Windows platforms!') { level :warn }
   end
