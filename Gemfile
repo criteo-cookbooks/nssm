@@ -8,6 +8,6 @@ gem 'rubocop'
 
 group :integration do
   gem 'kitchen-vagrant', '~> 0.21'
-  gem 'test-kitchen', '~> 1.12.0'
+  gem 'test-kitchen', '~> 1.12'
   gem 'winrm-fs', '~> 1.0'
 end
