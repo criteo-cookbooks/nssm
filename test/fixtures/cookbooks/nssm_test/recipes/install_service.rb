@@ -9,7 +9,7 @@ end
 
 nssm 'service name' do
   program "#{node['java_se']['win_javalink']}\\java.exe"
-  args %(-jar """#{jar_path.gsub('/', '\\')}""")
+  args %(-jar "#{jar_path.gsub('/', '\\')}")
   params(
     AppDirectory: Chef::Config[:file_cache_path].gsub('/', '\\'),
     AppStdout: ::File.join(Chef::Config[:file_cache_path],"service.log").gsub('/', '\\'),

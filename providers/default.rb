@@ -30,6 +30,7 @@ action :install_if_missing do
     end
     return
   end
+
   install_nssm
 
   execute "Install #{new_resource.servicename} service" do
@@ -39,7 +40,7 @@ action :install_if_missing do
 
   new_resource.params.map do |k, v|
     execute "Set parameter #{k} #{v}" do
-      command "#{nssm_exe} set \"#{new_resource.servicename}\" #{k} #{v}"
+      command "#{nssm_exe} set \"#{new_resource.servicename}\" #{k} \"#{v.to_s.gsub('-', '^-').gsub('"', '""')}\""
     end
   end
 
@@ -61,7 +62,7 @@ action :install do
 
   service_installed = service_installed?(new_resource.servicename)
 
-  execute "Install #{new_resource.servicename} service" do
+  install_service = execute "Install #{new_resource.servicename} service" do
     command "#{nssm_exe} install \"#{new_resource.servicename}\" \"#{new_resource.program}\" #{new_resource.args}"
     not_if { service_installed }
   end
@@ -71,18 +72,19 @@ action :install do
     "AppParameters" => new_resource.args
   )
 
-  params.each do |k, v|
+
+  set_parameters = params.map do |k, v|
     execute "Set parameter #{k} to #{v}" do
-      command "#{nssm_exe} set \"#{new_resource.servicename}\" #{k} #{v}"
-      not_if "#{nssm_exe} get \"#{new_resource.servicename}\" #{k} | findstr /L /X \"#{v}\""
+      command "#{nssm_exe} set \"#{new_resource.servicename}\" #{k} \"#{v.to_s.gsub('-', '^-').gsub('"', '""')}\""
+      not_if "#{nssm_exe} get \"#{new_resource.servicename}\" #{k} | findstr /L /B \"#{v.to_s.gsub('-', '^-').gsub('"', '""')}\""
     end
   end
-  service new_resource.servicename do
+  svc = service new_resource.servicename do
     action [:start]
     only_if { new_resource.start }
   end
 
-#  new_resource.updated_by_last_action(true)
+  new_resource.updated_by_last_action(install_service.updated_by_last_action? || svc.updated_by_last_action? || set_parameters.any? { |r| r.updated_by_last_action? })
 end
 
 action :remove do

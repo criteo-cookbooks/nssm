@@ -10,7 +10,7 @@ nssm 'bad service' do
   servicename 'service name'
   start false
   program "#{node['java_se']['win_javalink']}\\javabad.exe"
-  args %(-jar """#{jar_path.gsub('/', '\\')}bad""")
+  args %(-jar "#{jar_path.gsub('/', '\\')}bad")
   params(
     AppDirectory: ::File.join(Chef::Config[:file_cache_path], 'bad').gsub('/', '\\'),
     AppStdout: ::File.join(Chef::Config[:file_cache_path],"bad.stdout.log").gsub('/', '\\'),
@@ -23,7 +23,7 @@ end
 nssm 'fix service' do
   servicename 'service name'
   program "#{node['java_se']['win_javalink']}\\java.exe"
-  args %(-jar """#{jar_path.gsub('/', '\\')}""")
+  args %(-jar "#{jar_path.gsub('/', '\\')}")
   params(
     AppDirectory: Chef::Config[:file_cache_path].gsub('/', '\\'),
     AppStdout: ::File.join(Chef::Config[:file_cache_path],"service.log").gsub('/', '\\'),
