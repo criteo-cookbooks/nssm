@@ -1,4 +1,4 @@
-actions :install, :remove
+actions :install, :install_if_missing, :remove
 default_action :install
 
 attribute :servicename, name_attribute: true

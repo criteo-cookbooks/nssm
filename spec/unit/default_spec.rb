@@ -12,8 +12,7 @@ describe 'nssm::default' do
       expect(chef_run).to create_remote_file(
         "download #{CACHE}/nssm-#{VERSION}.zip"
       ).with(
-        path: "#{CACHE}/nssm-#{VERSION}.zip",
-        source: "http://nssm.cc/release/nssm-#{VERSION}.zip"
+        path: "#{CACHE}/nssm-#{VERSION}.zip"
       )
     end
 

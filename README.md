@@ -75,7 +75,7 @@ nssm 'service name' do
   action :install
 end
 ```
-    
+
 When dealing with arguments requiring
 [interpolation](http://en.wikibooks.org/wiki/Ruby_Programming/Syntax/Literals#Interpolation) and it contains one or
 more arguments with spaces, then encapsulate the `args` string using `%()` notation and use `"""` around arguments
@@ -100,7 +100,8 @@ checksum.
 
 #### Actions
 
-- `install` - Install a Windows service.
+- `install` - Install a Windows service, and update it accoridngly. (Note: it will NOT automatically restart the service, make sure to notify the according service to restart)
+- `install_if_missing` - Install a Windows service, but do not update it if present (old behaviour)
 - `remove` - Remove Windows service.
 
 #### Attribute Parameters
@@ -121,10 +122,10 @@ Example Matcher Usage
 ```ruby
 expect(chef_run).to install_nssm('service name').with(
   :program 'C:\Windows\System32\java.exe'
-  :args '-jar C:/path/to/my-executable.jar'    
+  :args '-jar C:/path/to/my-executable.jar'
 )
 ```
-      
+
 NSSM Cookbook Matchers
 
 - install_nssm(servicename)

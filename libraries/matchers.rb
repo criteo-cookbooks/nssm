@@ -6,4 +6,6 @@ if defined?(ChefSpec)
   def remove_nssm(servicename)
     ChefSpec::Matchers::ResourceMatcher.new(:nssm, :remove, servicename)
   end
+
+  ChefSpec.define_matcher :nssm
 end
