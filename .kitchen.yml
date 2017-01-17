@@ -16,3 +16,9 @@ suites:
     run_list:
       - nssm_test::install_service
     attributes:
+
+
+  - name: nssm_test_modification
+    run_list:
+      - nssm_test::modify_service
+    attributes:
