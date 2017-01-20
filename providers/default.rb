@@ -76,7 +76,7 @@ action :install do
   set_parameters = params.map do |k, v|
     execute "Set parameter #{k} to #{v}" do
       command "#{nssm_exe} set \"#{new_resource.servicename}\" #{k} \"#{v.to_s.gsub('"', '""')}\""
-      not_if "#{nssm_exe} get \"#{new_resource.servicename}\" #{k} | findstr /L /B \"#{v.to_s.gsub('-', '^-').gsub('"', '""')}\""
+      not_if "#{nssm_exe} get \"#{new_resource.servicename}\" #{k} | findstr /L /B \" #{v.to_s.gsub('"', '""')}\""
     end
   end
   svc = service new_resource.servicename do
