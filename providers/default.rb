@@ -40,7 +40,7 @@ action :install_if_missing do
 
   new_resource.params.map do |k, v|
     execute "Set parameter #{k} #{v}" do
-      command "#{nssm_exe} set \"#{new_resource.servicename}\" #{k} \"#{v.gsub('"', '""').strip}\""
+      command "#{nssm_exe} set \"#{new_resource.servicename}\" #{k} \"#{v.gsub('"', '^"').strip}\""
     end
   end
 
@@ -76,7 +76,7 @@ action :install do
   set_parameters = params.map do |k, v|
     execute "Set parameter #{k} to #{v}" do
       command "#{nssm_exe} set \"#{new_resource.servicename}\" #{k} \"#{v.to_s.gsub('"', '""').strip}\""
-      not_if "#{nssm_exe} get \"#{new_resource.servicename}\" #{k} | findstr /L /B \" #{v.to_s.gsub('"', '""').strip}\""
+      not_if "#{nssm_exe} get \"#{new_resource.servicename}\" #{k} | findstr /L /B \" #{v.to_s.gsub('"', '^"').strip}\""
     end
   end
   svc = service new_resource.servicename do
