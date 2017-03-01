@@ -41,6 +41,7 @@ action :install_if_missing do
   new_resource.params.map do |k, v|
     execute "Set parameter #{k} #{v}" do
       command "#{nssm_exe} set \"#{new_resource.servicename}\" #{k} \"#{v.gsub('"', '^"').strip}\""
+      not_if { service_installed }
     end
   end
 
