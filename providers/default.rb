@@ -76,10 +76,10 @@ action :install do
 
   set_parameters = params.map do |k, v|
     guard = unless v.to_s.empty? then
-      "#{nssm_exe} get \"#{new_resource.servicename}\" #{k} | findstr /L /B /c:\"#{v.to_s.gsub('"', '^"').strip}\""
+      "#{nssm_exe} get \"#{new_resource.servicename}\" #{k} | grep -F -- \"#{v.to_s.gsub('"', '""').strip}\""
     else
       #TODO FIXME
-      "#{nssm_exe} get \"#{new_resource.servicename}\" #{k} | findstr /L /B /c:\"#{v.to_s.gsub('"', '^"').strip}\""
+      "#{nssm_exe} get \"#{new_resource.servicename}\" #{k} | grep -F -- \"#{v.to_s.gsub('"', '""').strip}\""
     end
 
     execute "Set parameter #{k} to #{v}" do
