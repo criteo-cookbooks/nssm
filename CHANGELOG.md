@@ -2,7 +2,7 @@
 
 ## 3.0.0 2017-03-24
 
-- Rename sensitive attribute to confidential to be Chef 13 compatible
+- Rename params attribute to parameters to be Chef 13 compatible
 
 ## 2.0.0 2016-10-03
 
