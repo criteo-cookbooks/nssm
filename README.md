@@ -50,7 +50,7 @@ So, for example, the following sets the Startup directory, I/O redirection, and 
 nssm 'service name' do
   program 'C:\Windows\System32\java.exe'
   args '-jar C:/path/to/my-executable.jar'
-  params(
+  parameters(
     AppDirectory: 'C:/path/to',
     AppStdout: 'C:/path/to/log/service.log',
     AppStderr: 'C:/path/to/log/error.log',
@@ -62,7 +62,7 @@ end
 
 ### Arguments with Spaces
 
-Having spaces in `servicename`, `program` and `params` attributes is not a problem, but spaces in an argument is a
+Having spaces in `servicename`, `program` and `parameters` attributes is not a problem, but spaces in an argument is a
 different matter.
 
 When dealing with an argument containing spaces, surround it
@@ -108,7 +108,7 @@ checksum.
 - `servicename` - Name attribute. The name of the Windows service.
 - `program` - The program to be run as a service.
 - `args` - String of arguments for the program. Optional
-- `params` - Hash of key value pairs where key represents associated registry entry. Optional
+- `parameters` - Hash of key value pairs where key represents associated registry entry. Optional
 - `start` - Start service after installing. Default` -  true
 
 ## ChefSpec Matchers

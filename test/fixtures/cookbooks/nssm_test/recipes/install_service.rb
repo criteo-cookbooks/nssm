@@ -9,7 +9,7 @@ end
 nssm 'service name' do
   program "#{node['java_se']['win_javalink']}\\java.exe"
   args "-jar #{path}"
-  params(
+  parameters(
     AppDirectory: Chef::Config[:file_cache_path],
     AppStdout: "#{Chef::Config[:file_cache_path]}\\service.log",
     AppStderr: "#{Chef::Config[:file_cache_path]}\\error.log",

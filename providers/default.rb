@@ -34,7 +34,7 @@ action :install do
     end
 
     unless service_installed
-      new_resource.params.map do |k, v|
+      new_resource.parameters.map do |k, v|
         batch "Set parameter #{k} #{v}" do
           code "#{nssm_exe} set \"#{new_resource.servicename}\" #{k} #{v}"
         end
