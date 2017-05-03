@@ -3,8 +3,8 @@ if platform?('windows')
   basename = src.slice(src.rindex('/') + 1, src.rindex('.') - src.rindex('/') - 1)
   system = node['kernel']['machine'] == 'x86_64' ? 'win64' : 'win32'
   system_file = "#{Chef::Config[:file_cache_path]}/#{basename}/#{system}/nssm.exe"
-  
-  windows_zipfile "download nssm" do
+
+  windows_zipfile 'download nssm' do
     path Chef::Config[:file_cache_path]
     source src
     overwrite true
@@ -12,8 +12,8 @@ if platform?('windows')
     action :unzip
     notifies :create, 'remote_file[install nssm]', :immediately
   end
-  
-  remote_file "install nssm" do
+
+  remote_file 'install nssm' do
     path "#{node['nssm']['install_location']}/nssm.exe"
     source "file://#{system_file}"
   end
