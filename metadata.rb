@@ -11,3 +11,4 @@ version '3.0.0'
 chef_version '>= 12.6'
 
 supports 'windows'
+depends 'windows'
