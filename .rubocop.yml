@@ -3,11 +3,6 @@ AllCops:
     - '.kitchen/**/*'
     - 'vendor/**/*'
 
-LineLength:
-  Max: 120
-
-Metrics/BlockLength:
+Style/EndOfLine:
   Enabled: false
 
-AllCops:
-  DisplayCopNames: true
