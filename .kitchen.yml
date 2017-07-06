@@ -3,14 +3,14 @@ driver:
   name: vagrant
 
 provisioner:
-  name: chef_solo
-  require_chef_omnibus: 12.6
+  name: chef_zero
+  require_chef_omnibus: 12.7
 
-`platforms:
+platforms:
   - name: windows-2012r2
     driver:
       box: dhoer/windows-2012r2
-`
+
 suites:
   - name: nssm_test
     run_list:

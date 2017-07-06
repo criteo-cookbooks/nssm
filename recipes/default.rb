@@ -15,7 +15,7 @@ if platform?('windows')
 
   remote_file 'install nssm' do
     path "#{node['nssm']['install_location']}/nssm.exe"
-    source "file://#{system_file}"
+    source "file:///#{system_file}"
   end
 else
   log('NSSM can only be installed on Windows platforms!') { level :warn }
