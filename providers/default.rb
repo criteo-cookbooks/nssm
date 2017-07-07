@@ -26,12 +26,7 @@ def nssm_exe
 end
 
 action :install_if_missing do
-  unless platform?('windows')
-    log 'NSSM service can only be installed on Windows platforms!' do
-      level :warn
-    end
-    return
-  end
+  return Chef::Log.warn('NSSM service can only be installed on Windows platforms!') unless platform?('windows')
 
   install_nssm
 
@@ -73,7 +68,7 @@ action :install do
   parameters.map do |k, v|
     execute "Set parameter #{k} to #{v}" do
       command "#{nssm_exe} set \"#{new_resource.servicename}\" #{k} \"#{v.to_s.gsub('"', '""').strip}\""
-      not_if { "#{nssm_exe} get \"#{new_resource.servicename}\" #{k} | grep -F -- \"#{v.to_s.gsub('"', '""').strip}\"" }
+      not_if "#{nssm_exe} get \"#{new_resource.servicename}\" #{k} | grep -F -- \"#{v.to_s.gsub('"', '""').strip}\""
     end
   end
 
@@ -92,6 +87,6 @@ action :remove do
       only_if { service_installed }
     end
   else
-    log('NSSM service can only be removed from Windows platforms!') { level :warn }
+    Chef::Log.warn('NSSM service can only be removed from Windows platforms!')
   end
 end

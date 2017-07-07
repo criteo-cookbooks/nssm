@@ -11,21 +11,12 @@ end
 
 nssm 'service name' do
   program "#{node['java_se']['win_javalink']}\\java.exe"
-  args %(-jar "#{jar_path.tr('/', '\\')}")
+  args %(-jar #{jar_path.tr('/', '\\')})
   parameters(
     AppDirectory: Chef::Config[:file_cache_path].tr('/', '\\'),
-    AppStdout: ::File.join(Chef::Config[:file_cache_path], 'service.log').tr('/', '\\'),
-    AppStderr: ::File.join(Chef::Config[:file_cache_path], 'error.log').tr('/', '\\'),
+    AppStdout: "#{Chef::Config[:file_cache_path]}\\service.log".tr('/', '\\'),
+    AppStderr: "#{Chef::Config[:file_cache_path]}\\error.log".tr('/', '\\'),
     AppRotateFiles: 1
   )
   action :install
-
-  notifies :run, 'ruby_block[notified]'
-end
-
-ruby_block 'notified' do
-  block do
-  end
-
-  action :nothing
 end

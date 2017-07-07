@@ -7,19 +7,22 @@ describe 'nssm::default' do
     let(:chef_run) do
       ChefSpec::SoloRunner.new(
         file_cache_path: CACHE, platform: 'windows', version: '2008R2'
-      ).converge(described_recipe)
+      ) do
+        ENV['WINDIR'] = 'C:\tmp'
+      end.converge(described_recipe)
     end
 
     it 'download nssm' do
       expect(chef_run).to unzip_windows_zipfile('download nssm').with(
-        path: "#{CACHE}/nssm-#{VERSION}.zip",
-        source: "https://nssm.cc/release/nssm-#{VERSION}.zip"
+        path: CACHE,
+        source: "https://nssm.cc/ci/nssm-#{VERSION}.zip"
       )
     end
 
     it 'install nssm' do
-      expect(chef_run).to_not run_batch('install nssm').with(
-        code: %r{xcopy ".*\\nssm-.*\\win64\\nssm.exe" "%WINDIR%" /y}
+      expect(chef_run).to create_remote_file('install nssm').with(
+        path: 'C:\tmp\nssm.exe',
+        source: "file:///#{CACHE}/nssm-2.24-94-g9c88bc1/win64/nssm.exe"
       )
     end
   end

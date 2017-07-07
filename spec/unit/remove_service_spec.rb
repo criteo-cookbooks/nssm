@@ -28,19 +28,9 @@ describe 'nssm_test::remove_service' do
     end
 
     it 'executes batch command to remove service' do
-      expect(chef_run).to run_batch('Remove service service name').with(
-        code: /%WINDIR%\\nssm.exe remove "service name" confirm/
+      expect(chef_run).to run_execute('Remove service service name').with(
+        command: /C:\\tmp\\nssm.exe remove "service name" confirm/
       )
-    end
-  end
-
-  context 'linux' do
-    let(:chef_run) do
-      ChefSpec::SoloRunner.new(platform: 'centos', version: '7.0', step_into: ['nssm']).converge(described_recipe)
-    end
-
-    it 'writes a log with warning' do
-      expect(chef_run).to write_log('NSSM service can only be removed from Windows platforms!').with(level: :warn)
     end
   end
 end
