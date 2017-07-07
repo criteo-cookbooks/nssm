@@ -11,7 +11,7 @@ and `remove` Windows services.
 
 ## Requirements
 
-- Chef 12.6+
+- Chef 12.7+
 
 ### Platform
 

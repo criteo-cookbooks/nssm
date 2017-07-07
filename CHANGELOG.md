@@ -1,5 +1,10 @@
 # NSSM CHANGELOG
 
+## 3.0.1 2017-07-07
+
+- Chef 12.7 or higher is now required
+- Fix parameters attribute
+
 ## 3.0.0 2017-03-24
 
 - Rename params attribute to parameters to be Chef 13 compatible

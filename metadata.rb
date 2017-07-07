@@ -8,7 +8,7 @@ description 'Installs/Configures NSSM'
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
 source_url 'https://github.com/dhoer/chef-nssm'
 issues_url 'https://github.com/dhoer/chef-nssm/issues'
-version '4.0.0'
+version '3.0.1'
 
 chef_version '>= 12.7'
 
