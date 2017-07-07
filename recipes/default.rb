@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 if platform?('windows')
   src = node['nssm']['src']
   basename = src.slice(src.rindex('/') + 1, src.rindex('.') - src.rindex('/') - 1)
@@ -18,5 +20,5 @@ if platform?('windows')
     source "file:///#{system_file}"
   end
 else
-  log('NSSM can only be installed on Windows platforms!') { level :warn }
+  Chef::Log.warn('NSSM can only be installed on Windows platforms!')
 end

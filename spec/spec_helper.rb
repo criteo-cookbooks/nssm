@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Added by ChefSpec
 require 'chefspec'
 require 'chefspec/berkshelf'

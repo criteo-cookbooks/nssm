@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'cookstyle'
 require 'foodcritic'
 require 'rubocop/rake_task'

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 use_inline_resources
 
 require 'win32ole' if RUBY_PLATFORM =~ /mswin|mingw32|windows/
@@ -38,61 +40,47 @@ action :install_if_missing do
     not_if { service_installed }
   end
 
-  new_resource.params.map do |k, v|
+  new_resource.parameters.map do |k, v|
     execute "Set parameter #{k} #{v}" do
       command "#{nssm_exe} set \"#{new_resource.servicename}\" #{k} \"#{v.gsub('"', '^"').strip}\""
       not_if { service_installed }
     end
   end
 
-  service new_resource.servicename do
+  service new_resource.servicename do # ~FC021
     action [:start]
     only_if { new_resource.start }
   end
 end
 
 action :install do
-  unless platform?('windows')
-    log 'NSSM service can only be installed on Windows platforms!' do
-      level :warn
-    end
-    return
-  end
+  return Chef::Log.warn('NSSM service can only be installed on Windows platforms!') unless platform?('windows')
 
   install_nssm
 
   service_installed = service_installed?(new_resource.servicename)
 
-  install_service = execute "Install #{new_resource.servicename} service" do
+  execute "Install #{new_resource.servicename} service" do
     command "#{nssm_exe} install \"#{new_resource.servicename}\" \"#{new_resource.program}\" #{new_resource.args}"
     not_if { service_installed }
   end
 
-  params = new_resource.params.merge(
-    "Application" => new_resource.program,
-    "AppParameters" => new_resource.args
+  parameters = new_resource.parameters.merge(
+    'Application' => new_resource.program,
+    'AppParameters' => new_resource.args
   )
 
-
-  set_parameters = params.map do |k, v|
-    guard = unless v.to_s.empty? then
-      "#{nssm_exe} get \"#{new_resource.servicename}\" #{k} | grep -F -- \"#{v.to_s.gsub('"', '""').strip}\""
-    else
-      #TODO FIXME
-      "#{nssm_exe} get \"#{new_resource.servicename}\" #{k} | grep -F -- \"#{v.to_s.gsub('"', '""').strip}\""
-    end
-
+  parameters.map do |k, v|
     execute "Set parameter #{k} to #{v}" do
       command "#{nssm_exe} set \"#{new_resource.servicename}\" #{k} \"#{v.to_s.gsub('"', '""').strip}\""
-      not_if guard
+      not_if { "#{nssm_exe} get \"#{new_resource.servicename}\" #{k} | grep -F -- \"#{v.to_s.gsub('"', '""').strip}\"" }
     end
   end
-  svc = service new_resource.servicename do
+
+  service new_resource.servicename do # ~FC021
     action [:start]
     only_if { new_resource.start }
   end
-
-  new_resource.updated_by_last_action(install_service.updated_by_last_action? || svc.updated_by_last_action? || set_parameters.any? { |r| r.updated_by_last_action? })
 end
 
 action :remove do

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 if defined?(ChefSpec)
   def install_nssm(servicename)
     ChefSpec::Matchers::ResourceMatcher.new(:nssm, :install, servicename)

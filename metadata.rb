@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 name 'nssm'
 maintainer 'Dennis Hoer'
 maintainer_email 'dennis.hoer@gmail.com'

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'serverspec_helper'
 
 describe 'selenium::server' do

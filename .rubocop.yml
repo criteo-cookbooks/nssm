@@ -3,6 +3,6 @@ AllCops:
     - '.kitchen/**/*'
     - 'vendor/**/*'
 
-Style/EndOfLine:
+Layout/EndOfLine:
   Enabled: false
 

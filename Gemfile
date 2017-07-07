@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 source 'https://rubygems.org'
 
-gem 'berkshelf', '~> 6.1'
+gem 'berkshelf'
 gem 'chef', '>= 12.7'
 gem 'chefspec'
 gem 'cookstyle'
