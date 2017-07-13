@@ -1,5 +1,9 @@
 # NSSM CHANGELOG
 
+## 3.0.2 2017-07-13
+
+- Fix whyrun issues
+
 ## 3.0.1 2017-07-07
 
 - Chef 12.7 or higher is now required
