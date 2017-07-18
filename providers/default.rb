@@ -70,9 +70,10 @@ action :install do
   )
 
   parameters.map do |k, v|
-    execute "Set parameter #{k} to #{v}" do
-      command "#{nssm_exe} set \"#{new_resource.servicename}\" #{k} \"#{v.to_s.gsub('"', '""').strip}\""
-      not_if "#{nssm_exe} get \"#{new_resource.servicename}\" #{k} | grep -F -- \"#{v.to_s.gsub('"', '""').strip}\""
+    value = v.to_s.gsub('"', '^"').strip
+    execute "Set parameter #{k} to #{value}" do
+      command "#{nssm_exe} set \"#{new_resource.servicename}\" #{k} \"#{value}\""
+      not_if "#{nssm_exe} get \"#{new_resource.servicename}\" #{k} | grep -F -- \"#{value}\""
     end
   end
 
