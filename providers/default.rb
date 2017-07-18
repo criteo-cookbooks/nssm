@@ -2,20 +2,8 @@
 
 use_inline_resources
 
-require 'win32ole' if RUBY_PLATFORM =~ /mswin|mingw32|windows/
-
 def whyrun_supported?
   true
-end
-
-def execute_wmi_query(wmi_query)
-  wmi = ::WIN32OLE.connect('winmgmts://')
-  result = wmi.ExecQuery(wmi_query)
-  result.each.count > 0
-end
-
-def service_installed?(servicename)
-  execute_wmi_query("select * from Win32_Service where name = '#{servicename}'")
 end
 
 def install_nssm
@@ -33,6 +21,7 @@ action :install_if_missing do
   return Chef::Log.warn('NSSM service can only be installed on Windows platforms!') unless platform?('windows')
 
   install_nssm
+  service_installed = ::Win32::Service.exists? new_resource.servicename
 
   execute "Install #{new_resource.servicename} service" do
     command "#{nssm_exe} install \"#{new_resource.servicename}\" \"#{new_resource.program}\" #{new_resource.args}"
@@ -56,8 +45,7 @@ action :install do
   return Chef::Log.warn('NSSM service can only be installed on Windows platforms!') unless platform?('windows')
 
   install_nssm
-
-  service_installed = service_installed?(new_resource.servicename)
+  service_installed = ::Win32::Service.exists? new_resource.servicename
 
   execute "Install #{new_resource.servicename} service" do
     command "#{nssm_exe} install \"#{new_resource.servicename}\" \"#{new_resource.program}\" #{new_resource.args}"
@@ -85,7 +73,7 @@ end
 
 action :remove do
   if platform?('windows')
-    service_installed = service_installed?(new_resource.servicename)
+    service_installed = ::Win32::Service.exists? new_resource.servicename
 
     execute "Remove service #{new_resource.servicename}" do
       command "#{nssm_exe} remove \"#{new_resource.servicename}\" confirm"
