@@ -61,7 +61,7 @@ action :install do
     value = v.to_s.gsub('"', '^"').strip
     execute "Set parameter #{k} to #{value}" do
       command "#{nssm_exe} set \"#{new_resource.servicename}\" #{k} \"#{value}\""
-      not_if "#{nssm_exe} get \"#{new_resource.servicename}\" #{k} | grep -F -- \"#{value}\""
+      not_if "#{nssm_exe} get \"#{new_resource.servicename}\" #{k} | findstr /BEC:\"#{value}\""
     end
   end
 
