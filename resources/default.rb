@@ -9,6 +9,7 @@ property :servicename, name_attribute: true
 property :program, kind_of: String, required: true
 property :args, kind_of: String
 property :parameters, kind_of: Hash, default: lazy { ::Mash.new }
+property :nssm_binary, kind_of: String, default: lazy { "#{node['nssm']['install_location']}\\nssm.exe" }
 property :start, kind_of: [TrueClass, FalseClass], default: true
 
 action :install_if_missing do
@@ -18,13 +19,13 @@ action :install_if_missing do
   service_installed = ::Win32::Service.exists? new_resource.servicename
 
   execute "Install #{new_resource.servicename} service" do
-    command "#{nssm_exe} install \"#{new_resource.servicename}\" \"#{new_resource.program}\" #{new_resource.args}"
+    command "#{nssm_binary} install \"#{new_resource.servicename}\" \"#{new_resource.program}\" #{new_resource.args}"
     not_if { service_installed }
   end
 
   new_resource.parameters.map do |k, v|
     execute "Set parameter #{k} #{v}" do
-      command "#{nssm_exe} set \"#{new_resource.servicename}\" #{k} \"#{v.gsub('"', '^"').strip}\""
+      command "#{nssm_binary} set \"#{new_resource.servicename}\" #{k} \"#{v.gsub('"', '^"').strip}\""
       not_if { service_installed }
     end
   end
@@ -42,7 +43,7 @@ action :install do
   service_installed = ::Win32::Service.exists? new_resource.servicename
 
   execute "Install #{new_resource.servicename} service" do
-    command "#{nssm_exe} install \"#{new_resource.servicename}\" \"#{new_resource.program}\" #{new_resource.args}"
+    command "#{nssm_binary} install \"#{new_resource.servicename}\" \"#{new_resource.program}\" #{new_resource.args}"
     not_if { service_installed }
   end
 
@@ -54,8 +55,8 @@ action :install do
   parameters.map do |k, v|
     value = v.to_s.gsub('"', '^"').strip
     execute "Set parameter #{k} to #{value}" do
-      command "#{nssm_exe} set \"#{new_resource.servicename}\" #{k} \"#{value}\""
-      not_if "#{nssm_exe} get \"#{new_resource.servicename}\" #{k} | findstr /BEC:\"#{value}\""
+      command "#{nssm_binary} set \"#{new_resource.servicename}\" #{k} \"#{value}\""
+      not_if "#{nssm_binary} get \"#{new_resource.servicename}\" #{k} | findstr /BEC:\"#{value}\""
     end
   end
 
@@ -70,7 +71,7 @@ action :remove do
     service_installed = ::Win32::Service.exists? new_resource.servicename
 
     execute "Remove service #{new_resource.servicename}" do
-      command "#{nssm_exe} remove \"#{new_resource.servicename}\" confirm"
+      command "#{nssm_binary} remove \"#{new_resource.servicename}\" confirm"
       only_if { service_installed }
     end
   else
@@ -88,9 +89,5 @@ action_class do
     recipe_eval do
       run_context.include_recipe 'nssm::default'
     end
-  end
-
-  def nssm_exe
-    "#{node['nssm']['install_location']}\\nssm.exe"
   end
 end
