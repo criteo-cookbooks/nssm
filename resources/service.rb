@@ -1,16 +1,16 @@
-# frozen_string_literal: true
-
-actions :install, :install_if_missing, :remove
-default_action :install
-
-provides 'nssm'
+provides :nssm_service, platform: 'windows'
+# TODO: migrate to nssm_service with a breaking change notice
+provides :nssm, platform: 'windows'
 
 property :servicename, name_attribute: true
 property :program, kind_of: String, required: true
 property :args, kind_of: String
 property :parameters, kind_of: Hash, default: lazy { ::Mash.new }
 property :nssm_binary, kind_of: String, default: lazy { "#{node['nssm']['install_location']}\\nssm.exe" }
+# TODO: migrate this to :start action with a breaking change
 property :start, kind_of: [TrueClass, FalseClass], default: true
+# TODO: add start as default action with a breaking change
+default_action :install
 
 include ::Chef::Mixin::ShellOut
 include ::NSSM::ParameterHelper
@@ -32,15 +32,7 @@ load_current_value do
   args parameters['AppParameters']
 end
 
-action :install_if_missing do
-  return Chef::Log.warn('NSSM service can only be installed on Windows platforms!') unless platform?('windows')
-
-  run_action :install if current_resource.nil?
-end
-
 action :install do
-  return Chef::Log.warn('NSSM service can only be installed on Windows platforms!') unless platform?('windows')
-
   install_nssm
 
   service = prepare_parameter new_resource.servicename
@@ -58,32 +50,33 @@ action :install do
     end
   end
 
-  service new_resource.servicename do # ~FC021
-    action [:start]
+  # TODO: migrate this to :start action with a breaking change
+  service new_resource.servicename do
+    action :start
     only_if { new_resource.start }
   end
 end
 
+action :install_if_missing do
+  run_action :install if current_resource.nil?
+end
+
 action :remove do
-  if platform?('windows')
-    execute "Remove service #{new_resource.servicename}" do
-      command %(#{new_resource.nssm_binary} remove "#{prepare_parameter new_resource.servicename}" confirm)
-      not_if { current_resource.nil? }
-    end
-  else
-    Chef::Log.warn('NSSM service can only be removed from Windows platforms!')
+  execute "Remove service #{new_resource.servicename}" do
+    command %(#{new_resource.nssm_binary} remove "#{prepare_parameter new_resource.servicename}" confirm)
+    not_if { current_resource.nil? }
   end
 end
 
 action :start do
   # TODO: handle paused state
-  service servicename do
+  service new_resource.servicename do
     action :start
   end
 end
 
 action :stop do
-  service servicename do
+  service new_resource.servicename do
     action :stop
   end
 end
@@ -93,6 +86,7 @@ action_class do
     true
   end
 
+  # TODO: Move this into a dedicated resource
   def install_nssm
     return if run_context.loaded_recipe? 'nssm::default'
     recipe_eval do
