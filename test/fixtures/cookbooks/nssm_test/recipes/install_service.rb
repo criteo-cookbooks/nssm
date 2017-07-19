@@ -18,5 +18,6 @@ nssm 'service name' do
     AppStderr: "#{Chef::Config[:file_cache_path]}\\error.log".tr('/', '\\'),
     AppRotateFiles: 1
   )
+  nssm_binary 'C:\tmp\nssm.exe'
   action :install
 end
