@@ -43,21 +43,18 @@ action :install do
 
   install_nssm
 
+  service = prepare_parameter new_resource.servicename
   execute "Install #{new_resource.servicename} service" do
-    command "#{nssm_binary} install \"#{new_resource.servicename}\" \"#{new_resource.program}\" #{new_resource.args}"
-    not_if { current_resource.nil? }
+    command %(#{new_resource.nssm_binary} install "#{service}" "#{prepare_parameter new_resource.program}" #{prepare_parameter new_resource.args})
+    only_if { current_resource.nil? }
   end
 
-  parameters = new_resource.parameters.merge(
-    'Application' => new_resource.program,
-    'AppParameters' => new_resource.args
-  )
-
-  parameters.map do |k, v|
-    value = v.to_s.gsub('"', '^"').strip
-    execute "Set parameter #{k} to #{value}" do
-      command "#{nssm_binary} set \"#{new_resource.servicename}\" #{k} \"#{value}\""
-      not_if "#{nssm_binary} get \"#{new_resource.servicename}\" #{k} | findstr /BEC:\"#{value}\""
+  params = new_resource.parameters.merge(Application: new_resource.program, AppParameters: new_resource.args)
+  params.map do |key, value|
+    value = prepare_parameter value
+    execute "Set parameter #{key} to #{value}" do
+      command %(#{new_resource.nssm_binary} set "#{service}" #{key} #{value})
+      not_if { current_resource && current_resource.parameters[key] == value }
     end
   end
 
@@ -70,8 +67,8 @@ end
 action :remove do
   if platform?('windows')
     execute "Remove service #{new_resource.servicename}" do
-      command "#{nssm_binary} remove \"#{new_resource.servicename}\" confirm"
-      only_if { current_resource.nil? }
+      command %(#{new_resource.nssm_binary} remove "#{prepare_parameter new_resource.servicename}" confirm)
+      not_if { current_resource.nil? }
     end
   else
     Chef::Log.warn('NSSM service can only be removed from Windows platforms!')
