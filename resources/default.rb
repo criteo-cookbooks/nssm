@@ -12,6 +12,26 @@ property :parameters, kind_of: Hash, default: lazy { ::Mash.new }
 property :nssm_binary, kind_of: String, default: lazy { "#{node['nssm']['install_location']}\\nssm.exe" }
 property :start, kind_of: [TrueClass, FalseClass], default: true
 
+include ::Chef::Mixin::ShellOut
+include ::NSSM::ParameterHelper
+
+load_current_value do
+  cmd = shell_out %(#{nssm_binary} dump "#{prepare_parameter servicename}")
+  current_value_does_not_exist! if cmd.error?
+
+  cmd.stdout.to_s.split(/\r?\n/) do |line|
+    case line
+    when /nssm.exe install #{servicename}/
+      program strip_and_unescape(line.split(servicename, 2).last)
+      parameters['Application'] = program
+    when /nssm.exe set #{servicename}/
+      param, value = line.split(servicename, 2).last.split(' ', 2)
+      parameters[param] = strip_and_unescape value
+    end
+  end
+  args parameters['AppParameters']
+end
+
 action :install_if_missing do
   return Chef::Log.warn('NSSM service can only be installed on Windows platforms!') unless platform?('windows')
 
@@ -40,11 +60,10 @@ action :install do
   return Chef::Log.warn('NSSM service can only be installed on Windows platforms!') unless platform?('windows')
 
   install_nssm
-  service_installed = ::Win32::Service.exists? new_resource.servicename
 
   execute "Install #{new_resource.servicename} service" do
     command "#{nssm_binary} install \"#{new_resource.servicename}\" \"#{new_resource.program}\" #{new_resource.args}"
-    not_if { service_installed }
+    not_if { current_resource.nil? }
   end
 
   parameters = new_resource.parameters.merge(
@@ -68,11 +87,9 @@ end
 
 action :remove do
   if platform?('windows')
-    service_installed = ::Win32::Service.exists? new_resource.servicename
-
     execute "Remove service #{new_resource.servicename}" do
       command "#{nssm_binary} remove \"#{new_resource.servicename}\" confirm"
-      only_if { service_installed }
+      only_if { current_resource.nil? }
     end
   else
     Chef::Log.warn('NSSM service can only be removed from Windows platforms!')
