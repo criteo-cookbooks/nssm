@@ -75,6 +75,19 @@ action :remove do
   end
 end
 
+action :start do
+  # TODO: handle paused state
+  service servicename do
+    action :start
+  end
+end
+
+action :stop do
+  service servicename do
+    action :stop
+  end
+end
+
 action_class do
   def whyrun_supported?
     true
