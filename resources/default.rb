@@ -35,25 +35,7 @@ end
 action :install_if_missing do
   return Chef::Log.warn('NSSM service can only be installed on Windows platforms!') unless platform?('windows')
 
-  install_nssm
-  service_installed = ::Win32::Service.exists? new_resource.servicename
-
-  execute "Install #{new_resource.servicename} service" do
-    command "#{nssm_binary} install \"#{new_resource.servicename}\" \"#{new_resource.program}\" #{new_resource.args}"
-    not_if { service_installed }
-  end
-
-  new_resource.parameters.map do |k, v|
-    execute "Set parameter #{k} #{v}" do
-      command "#{nssm_binary} set \"#{new_resource.servicename}\" #{k} \"#{v.gsub('"', '^"').strip}\""
-      not_if { service_installed }
-    end
-  end
-
-  service new_resource.servicename do # ~FC021
-    action [:start]
-    only_if { new_resource.start }
-  end
+  run_action :install if current_resource.nil?
 end
 
 action :install do
