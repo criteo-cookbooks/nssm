@@ -13,20 +13,19 @@ property :start, kind_of: [TrueClass, FalseClass], default: true
 default_action :install
 
 include ::Chef::Mixin::ShellOut
-include ::NSSM::ParameterHelper
 
-load_current_value do
-  cmd = shell_out %(#{nssm_binary} dump "#{prepare_parameter servicename}")
+load_current_value do |wanted|
+  cmd = shell_out ::NSSM.command(wanted.nssm_binary, :dump, servicename)
   current_value_does_not_exist! if cmd.error?
 
   cmd.stdout.to_s.split(/\r?\n/) do |line|
     case line
     when /nssm.exe install #{servicename}/
-      program strip_and_unescape(line.split(servicename, 2).last)
+      program ::NSSM.strip_and_unescape(line.split(servicename, 2).last)
       parameters['Application'] = program
     when /nssm.exe set #{servicename}/
       param, value = line.split(servicename, 2).last.split(' ', 2)
-      parameters[param] = strip_and_unescape value
+      parameters[param] = ::NSSM.strip_and_unescape value
     end
   end
   args parameters['AppParameters']
@@ -35,18 +34,16 @@ end
 action :install do
   install_nssm
 
-  service = prepare_parameter new_resource.servicename
   execute "Install #{new_resource.servicename} service" do
-    command %(#{new_resource.nssm_binary} install "#{service}" "#{prepare_parameter new_resource.program}" #{prepare_parameter new_resource.args})
+    command ::NSSM.command(new_resource.nssm_binary, :install, new_resource.servicename, new_resource.program, new_resource.args)
     only_if { current_resource.nil? }
   end
 
   params = new_resource.parameters.merge(Application: new_resource.program, AppParameters: new_resource.args)
   params.map do |key, value|
-    value = prepare_parameter value
     execute "Set parameter #{key} to #{value}" do
-      command %(#{new_resource.nssm_binary} set "#{service}" #{key} #{value})
-      not_if { current_resource && current_resource.parameters[key] == value }
+      command ::NSSM.command(new_resource.nssm_binary, :set, new_resource.servicename, key, value)
+      not_if { current_resource && current_resource.parameters[key] == ::NSSM.prepare_parameter(value) }
     end
   end
 
@@ -63,7 +60,7 @@ end
 
 action :remove do
   execute "Remove service #{new_resource.servicename}" do
-    command %(#{new_resource.nssm_binary} remove "#{prepare_parameter new_resource.servicename}" confirm)
+    command ::NSSM.command(new_resource.nssm_binary, :remove, new_resource.servicename, :confirm)
     not_if { current_resource.nil? }
   end
 end

@@ -32,7 +32,7 @@ describe 'nssm_test::install_service' do
 
       it 'executes command to install service' do
         expect(chef_run).to run_execute('Install service name service').with(
-          command: 'C:\\tmp\\nssm.exe install "service name" "C:\\java\\bin\\java.exe"' \
+          command: 'C:\\tmp\\nssm.exe install "service name" C:\\java\\bin\\java.exe' \
             ' -jar C:\\chef\\cache\\selenium-server-standalone-2.53.0.jar'
         )
       end
