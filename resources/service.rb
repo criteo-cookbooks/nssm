@@ -7,7 +7,6 @@ property :program, kind_of: String, required: true
 property :args, kind_of: String
 property :parameters, kind_of: Hash, default: lazy { ::Mash.new }
 property :nssm_binary, kind_of: String, default: lazy { ::NSSM.binary_path node }
-# TODO: migrate this to :start action with a breaking change
 property :start, kind_of: [TrueClass, FalseClass], default: true
 # TODO: add start as default action with a breaking change
 default_action :install
@@ -26,9 +25,13 @@ end
 action :install do
   install_nssm
 
+  # Include action_start's resources to allow notification
+  action_start
+
   execute "Install #{new_resource.servicename} service" do
     command ::NSSM.command(new_resource.nssm_binary, :install, new_resource.servicename, new_resource.program, new_resource.args)
     only_if { current_resource.nil? }
+    notifies :start, "service[#{new_resource.servicename}]", :delayed if new_resource.start
   end
 
   ruby_block "Configure service binary path to #{new_resource.nssm_binary}" do
@@ -42,12 +45,6 @@ action :install do
       command ::NSSM.command(new_resource.nssm_binary, :set, new_resource.servicename, key, value)
       not_if { current_resource && current_resource.parameters[key] == ::NSSM.prepare_parameter(value) }
     end
-  end
-
-  # TODO: migrate this to :start action with a breaking change
-  service new_resource.servicename do
-    action :start
-    only_if { new_resource.start }
   end
 end
 

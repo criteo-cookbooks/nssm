@@ -74,7 +74,7 @@ describe 'nssm_test::install_service' do
       end
 
       it 'starts service' do
-        expect(chef_run).to start_service('service name')
+        expect(chef_run.execute('Install service name service')).to notify('service[service name]')
       end
     end
 
