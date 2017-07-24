@@ -56,6 +56,9 @@ action :install_if_missing do
 end
 
 action :remove do
+  # Ensure service is stopped before removing it
+  action_stop
+
   execute "Remove service #{new_resource.servicename}" do
     command ::NSSM.command(new_resource.nssm_binary, :remove, new_resource.servicename, :confirm)
     not_if { current_resource.nil? }
