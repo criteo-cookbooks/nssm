@@ -155,7 +155,7 @@ describe 'nssm_test::install_service' do
       end
 
       it 'starts service' do
-        expect(chef_run).to start_service('service name')
+        expect(chef_run).not_to start_service('service name')
       end
     end
 
