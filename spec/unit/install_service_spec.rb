@@ -16,7 +16,7 @@ describe 'nssm_test::install_service' do
 
     context 'when the service is not yet installed' do
       before do
-        stub_shellout('c:\tmp\nssm.exe dump "service name"', error?: true)
+        stub_win32_service_method :exists?, 'service name', false
       end
 
       it 'installs selenium' do
@@ -80,7 +80,8 @@ describe 'nssm_test::install_service' do
 
     context 'when the service is already installed' do
       before do
-        stub_shellout('c:\tmp\nssm.exe dump "service name"', error?: true)
+        stub_win32_service_method :exists?, 'service name', true
+        stub_win32_service_method :config_info, 'service name', double('config', binary_path_name: 'c:\tmp\nssm.exe')
       end
 
       it 'does not execute command to install service' do
@@ -121,7 +122,8 @@ describe 'nssm_test::install_service' do
 
     describe 'when the service is installed with incorrect parameters' do
       before do
-        stub_shellout('c:\tmp\nssm.exe dump "service name"', error?: true)
+        stub_win32_service_method :exists?, 'service name', true
+        stub_win32_service_method :config_info, 'service name', double('config', binary_path_name: 'c:\tmp\nssm.exe')
       end
 
       it 'installs selenium' do

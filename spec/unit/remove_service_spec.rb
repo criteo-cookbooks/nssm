@@ -9,7 +9,8 @@ describe 'nssm_test::remove_service' do
     end
 
     before do
-      stub_shellout('c:\tmp\nssm.exe dump "service name"', error?: false)
+      stub_win32_service_method :exists?, 'service name', true
+      stub_win32_service_method :config_info, 'service name', double('config', binary_path_name: 'c:\tmp\nssm.exe')
     end
 
     it 'calls nssm remove resource' do

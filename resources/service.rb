@@ -12,22 +12,14 @@ property :start, kind_of: [TrueClass, FalseClass], default: true
 # TODO: add start as default action with a breaking change
 default_action :install
 
-include ::Chef::Mixin::ShellOut
-
 load_current_value do |wanted|
-  cmd = shell_out ::NSSM.command(wanted.nssm_binary, :dump, servicename)
-  current_value_does_not_exist! if cmd.error?
+  current_value_does_not_exist! unless ::Win32::Service.exists? servicename
+  nssm_binary ::Win32::Service.config_info(servicename).binary_path_name
 
-  cmd.stdout.to_s.split(/\r?\n/) do |line|
-    case line
-    when /nssm.exe install #{servicename}/
-      program ::NSSM.strip_and_unescape(line.split(servicename, 2).last)
-      parameters['Application'] = program
-    when /nssm.exe set #{servicename}/
-      param, value = line.split(servicename, 2).last.split(' ', 2)
-      parameters[param] = ::NSSM.strip_and_unescape value
-    end
-  end
+  parameters ::NSSM.dump_parameters(wanted.nssm_binary, servicename)
+  next if parameters.empty?
+
+  program parameters['Application']
   args parameters['AppParameters']
 end
 
@@ -55,7 +47,7 @@ action :install do
 end
 
 action :install_if_missing do
-  run_action :install if current_resource.nil?
+  action_install if current_resource.nil?
 end
 
 action :remove do
@@ -69,12 +61,14 @@ action :start do
   # TODO: handle paused state
   service new_resource.servicename do
     action :start
+    not_if { current_resource.nil? }
   end
 end
 
 action :stop do
   service new_resource.servicename do
     action :stop
+    not_if { current_resource.nil? }
   end
 end
 
