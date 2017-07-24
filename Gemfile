@@ -3,8 +3,8 @@
 source 'https://rubygems.org'
 
 gem 'berkshelf'
-gem 'chef', '>= 12.7'
-gem 'chefspec'
+gem 'chef', '>= 12.14.89'
+gem 'chefspec', '>= 7.1.0'
 gem 'cookstyle'
 gem 'foodcritic'
 

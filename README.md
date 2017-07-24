@@ -56,37 +56,7 @@ nssm 'service name' do
     AppStderr: 'C:/path/to/log/error.log',
     AppRotateFiles: 1
   )
-  action :install
-end
-```
-
-### Arguments with Spaces
-
-Having spaces in `servicename`, `program` and `parameters` attributes is not a problem, but spaces in an argument is a
-different matter.
-
-When dealing with an argument containing spaces, surround it
-with [3 double quotes](http://stackoverflow.com/a/15262019):
-
-```ruby
-nssm 'service name' do
-  program 'C:\Program Files\Java\jdk1.7.0_67\bin\java.exe'
-  args '-jar """C:/path/with spaces to/my-executable.jar"""'
-  action :install
-end
-```
-
-When dealing with arguments requiring
-[interpolation](http://en.wikibooks.org/wiki/Ruby_Programming/Syntax/Literals#Interpolation) and it contains one or
-more arguments with spaces, then encapsulate the `args` string using `%()` notation and use `"""` around arguments
-with spaces:
-
-```ruby
-my_path_with_spaces = 'C:/path/with spaces to/my-executable.jar'
-nssm 'service name' do
-  program 'C:\Program Files\Java\jdk1.7.0_67\bin\java.exe'
-  args %(-jar """#{my_path_with_spaces}""")
-  action :install
+  action %i[install start]
 end
 ```
 
@@ -100,9 +70,11 @@ checksum.
 
 #### Actions
 
-- `install` - Install a Windows service, and update it accoridngly. (Note: it will NOT automatically restart the service, make sure to notify the according service to restart)
+- `install` - Install a Windows service, and update it accordingly. (Note: it will NOT automatically restart the service, make sure to notify the according service to restart)
 - `install_if_missing` - Install a Windows service, but do not update it if present (old behaviour)
 - `remove` - Remove Windows service.
+- `start` - Start the Windows service.
+- `stop` - Stop the Windows service.
 
 #### Attribute Parameters
 
@@ -110,7 +82,8 @@ checksum.
 - `program` - The program to be run as a service.
 - `args` - String of arguments for the program. Optional
 - `parameters` - Hash of key value pairs where key represents associated registry entry. Optional
-- `start` - Start service after installing. Default` -  true
+- `start` - Start service after installing. Default -  true
+- `nssm_binary` - Path to nssm binary. Default - `node['nssm']['install_location']\nssm.exe`
 
 ## ChefSpec Matchers
 

@@ -8,19 +8,9 @@ describe 'nssm_test::remove_service' do
       ChefSpec::SoloRunner.new(platform: 'windows', version: '2008R2', step_into: ['nssm']).converge(described_recipe)
     end
 
-    let(:fake_class) { Class.new }
-
     before do
-      obj = double
-      if ENV['APPVEYOR'] # Fix ArgumentError: wrong number of arguments (1 for 0)
-        require 'win32ole'
-        allow(WIN32OLE).to receive(:connect).with('winmgmts://').and_return(obj)
-      else
-        stub_const('::WIN32OLE', fake_class)
-        allow(fake_class).to receive(:connect).with('winmgmts://').and_return(obj)
-      end
-      allow(obj).to receive(:ExecQuery).and_return([''])
-      ENV['SYSTEMDRIVE'] = 'C:'
+      stub_win32_service_method :exists?, 'service name', true
+      stub_win32_service_method :config_info, 'service name', double('config', binary_path_name: 'c:\tmp\nssm.exe')
     end
 
     it 'calls nssm remove resource' do
@@ -29,7 +19,7 @@ describe 'nssm_test::remove_service' do
 
     it 'executes batch command to remove service' do
       expect(chef_run).to run_execute('Remove service service name').with(
-        command: /C:\\tmp\\nssm.exe remove "service name" confirm/
+        command: /C:\\tmp\\nssm-2.24-94-g9c88bc1.exe remove "service name" confirm/
       )
     end
   end
