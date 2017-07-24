@@ -6,7 +6,7 @@ property :servicename, name_attribute: true
 property :program, kind_of: String, required: true
 property :args, kind_of: String
 property :parameters, kind_of: Hash, default: lazy { ::Mash.new }
-property :nssm_binary, kind_of: String, default: lazy { "#{node['nssm']['install_location']}\\nssm.exe" }
+property :nssm_binary, kind_of: String, default: lazy { ::NSSM.binary_path node }
 # TODO: migrate this to :start action with a breaking change
 property :start, kind_of: [TrueClass, FalseClass], default: true
 # TODO: add start as default action with a breaking change
@@ -29,6 +29,11 @@ action :install do
   execute "Install #{new_resource.servicename} service" do
     command ::NSSM.command(new_resource.nssm_binary, :install, new_resource.servicename, new_resource.program, new_resource.args)
     only_if { current_resource.nil? }
+  end
+
+  ruby_block "Configure service binary path to #{new_resource.nssm_binary}" do
+    block { ::Win32::Service.configure(service_name: new_resource.servicename, binary_path_name: new_resource.nssm_binary) }
+    only_if { current_resource && current_resource.nssm_binary != new_resource.nssm_binary }
   end
 
   params = new_resource.parameters.merge(Application: new_resource.program, AppParameters: new_resource.args)

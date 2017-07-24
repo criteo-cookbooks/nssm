@@ -16,7 +16,7 @@ if platform?('windows')
   end
 
   remote_file 'install nssm' do
-    path "#{node['nssm']['install_location']}\\nssm.exe"
+    path ::NSSM.binary_path node
     source "file:///#{system_file}"
   end
 else

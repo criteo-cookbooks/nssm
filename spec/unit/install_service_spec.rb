@@ -32,44 +32,44 @@ describe 'nssm_test::install_service' do
 
       it 'executes command to install service' do
         expect(chef_run).to run_execute('Install service name service').with(
-          command: 'C:\\tmp\\nssm.exe install "service name" C:\\java\\bin\\java.exe' \
+          command: %(C:\\tmp\\nssm-#{VERSION}.exe install "service name" C:\\java\\bin\\java.exe) \
             ' -jar C:\\chef\\cache\\selenium-server-standalone-2.53.0.jar'
         )
       end
 
       it 'sets application' do
         expect(chef_run).to run_execute('Set parameter Application to C:\java\bin\java.exe').with(
-          command: 'C:\\tmp\\nssm.exe set "service name" Application C:\java\bin\java.exe'
+          command: %(C:\\tmp\\nssm-#{VERSION}.exe set "service name" Application C:\\java\\bin\\java.exe)
         )
       end
 
       it 'sets args' do
         expect(chef_run).to run_execute('Set parameter AppParameters to -jar C:\chef\cache\selenium-server-standalone-2.53.0.jar').with(
-          command: 'C:\\tmp\\nssm.exe set "service name" AppParameters -jar C:\chef\cache\selenium-server-standalone-2.53.0.jar'
+          command: %(C:\\tmp\\nssm-#{VERSION}.exe set "service name" AppParameters -jar C:\\chef\\cache\\selenium-server-standalone-2.53.0.jar)
         )
       end
 
       it 'sets start directory parameters' do
         expect(chef_run).to run_execute('Set parameter AppDirectory to C:\chef\cache').with(
-          command: 'C:\\tmp\\nssm.exe set "service name" AppDirectory C:\\chef\\cache'
+          command: %(C:\\tmp\\nssm-#{VERSION}.exe set "service name" AppDirectory C:\\chef\\cache)
         )
       end
 
       it 'sets stdout log' do
         expect(chef_run).to run_execute('Set parameter AppStdout to C:\chef\cache\service.log').with(
-          command: 'C:\\tmp\\nssm.exe set "service name" AppStdout C:\\chef\\cache\\service.log'
+          command: %(C:\\tmp\\nssm-#{VERSION}.exe set "service name" AppStdout C:\\chef\\cache\\service.log)
         )
       end
 
       it 'sets stderr log' do
         expect(chef_run).to run_execute('Set parameter AppStderr to C:\chef\cache\error.log').with(
-          command: 'C:\\tmp\\nssm.exe set "service name" AppStderr C:\\chef\\cache\\error.log'
+          command: %(C:\\tmp\\nssm-#{VERSION}.exe set "service name" AppStderr C:\\chef\\cache\\error.log)
         )
       end
 
       it 'sets rotate files' do
         expect(chef_run).to run_execute('Set parameter AppRotateFiles to 1').with(
-          command: 'C:\\tmp\\nssm.exe set "service name" AppRotateFiles 1'
+          command: %(C:\\tmp\\nssm-#{VERSION}.exe set "service name" AppRotateFiles 1)
         )
       end
 
@@ -86,32 +86,32 @@ describe 'nssm_test::install_service' do
 
       it 'does not execute command to install service' do
         expect(chef_run).to_not run_execute('Install service name service').with(
-          command: '"C:\tmp\\nssm.exe install "service name" "C:\\java\\bin\\java.exe"' \
+          command: %(C:\tmp\\nssm-#{VERSION}.exe install "service name" "C:\\java\\bin\\java.exe") \
             ' -jar "C:\\chef\\cache\\selenium-server-standalone-2.53.0.jar"'
         )
       end
 
       it 'does not set start directory parameters' do
         expect(chef_run).to_not run_execute('Set parameter AppDirectory to C:\\chef\\cache').with(
-          command: '"C:\tmp\\nssm.exe set "service name" AppDirectory C:\\chef\\cache'
+          command: %(C:\tmp\\nssm-#{VERSION}.exe set "service name" AppDirectory C:\\chef\\cache)
         )
       end
 
       it 'does not set stdout log' do
         expect(chef_run).to_not run_execute('Set parameter AppStdout to C:\\chef\\cache\\service.log').with(
-          command: '"C:\tmp\\nssm.exe set "service name" AppStdout C:\\chef\\cache\\service.log'
+          command: %(C:\tmp\\nssm-#{VERSION}.exe set "service name" AppStdout C:\\chef\\cache\\service.log)
         )
       end
 
       it 'does not set stderr log' do
         expect(chef_run).to_not run_execute('Set parameter AppStderr to C:\\chef\\cache\\error.log').with(
-          command: '"C:\tmp\\nssm.exe set "service name" AppStderr C:\\chef\\cache\\error.log'
+          command: %(C:\tmp\\nssm-#{VERSION}.exe set "service name" AppStderr C:\\chef\\cache\\error.log)
         )
       end
 
       it 'does not set rotate files' do
         expect(chef_run).to_not run_execute('Set parameter AppRotateFiles to 1').with(
-          command: '"C:\tmp\\nssm.exe set "service name" AppRotateFiles 1'
+          command: %(C:\tmp\\nssm-#{VERSION}.exe set "service name" AppRotateFiles 1)
         )
       end
 
@@ -132,25 +132,25 @@ describe 'nssm_test::install_service' do
 
       it 'sets start directory parameters' do
         expect(chef_run).to run_execute('Set parameter AppDirectory to C:\\chef\\cache').with(
-          command: 'C:\\tmp\\nssm.exe set "service name" AppDirectory C:\\chef\\cache'
+          command: %(C:\\tmp\\nssm-#{VERSION}.exe set "service name" AppDirectory C:\\chef\\cache)
         )
       end
 
       it 'sets stdout log' do
         expect(chef_run).to run_execute('Set parameter AppStdout to C:\\chef\\cache\\service.log').with(
-          command: 'C:\\tmp\\nssm.exe set "service name" AppStdout C:\\chef\\cache\\service.log'
+          command: %(C:\\tmp\\nssm-#{VERSION}.exe set "service name" AppStdout C:\\chef\\cache\\service.log)
         )
       end
 
       it 'sets stderr log' do
         expect(chef_run).to run_execute('Set parameter AppStderr to C:\\chef\\cache\\error.log').with(
-          command: 'C:\\tmp\\nssm.exe set "service name" AppStderr C:\\chef\\cache\\error.log'
+          command: %(C:\\tmp\\nssm-#{VERSION}.exe set "service name" AppStderr C:\\chef\\cache\\error.log)
         )
       end
 
       it 'sets rotate files' do
         expect(chef_run).to run_execute('Set parameter AppRotateFiles to 1').with(
-          command: 'C:\\tmp\\nssm.exe set "service name" AppRotateFiles 1'
+          command: %(C:\\tmp\\nssm-#{VERSION}.exe set "service name" AppRotateFiles 1)
         )
       end
 

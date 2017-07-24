@@ -5,6 +5,11 @@ module NSSM
 
   module_function
 
+  def binary_path(node)
+    binary_name = ::File.basename(node['nssm']['src']).gsub(/\.zip$/, '.exe')
+    "#{node['nssm']['install_location']}\\#{binary_name}"
+  end
+
   # Properly format a NSSM command
   def command(binary, action, service, param = nil, sub_param = nil)
     [
