@@ -25,8 +25,8 @@ end
 action :install do
   install_nssm
 
-  # Include action_start's resources to allow notification
-  action_start
+  # Declare the service for start notification
+  service new_resource.servicename
 
   execute "Install #{new_resource.servicename} service" do
     command ::NSSM.command(new_resource.nssm_binary, :install, new_resource.servicename, new_resource.program, new_resource.args)
@@ -53,8 +53,8 @@ action :install_if_missing do
 end
 
 action :remove do
-  # Ensure service is stopped before removing it
-  action_stop
+  # Declare the service for stop notification
+  service new_resource.servicename
 
   execute "Remove service #{new_resource.servicename}" do
     command ::NSSM.command(new_resource.nssm_binary, :remove, new_resource.servicename, :confirm)
