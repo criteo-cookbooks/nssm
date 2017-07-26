@@ -23,7 +23,10 @@ load_current_value do |wanted|
 end
 
 action :install do
-  install_nssm
+  nssm_install 'Install NSSM' do
+    source node['nssm']['src']
+    sha256 node['nssm']['sha256']
+  end
 
   # Declare the service for start notification
   service new_resource.servicename
@@ -80,13 +83,5 @@ end
 action_class do
   def whyrun_supported?
     true
-  end
-
-  # TODO: Move this into a dedicated resource
-  def install_nssm
-    return if run_context.loaded_recipe? 'nssm::default'
-    recipe_eval do
-      run_context.include_recipe 'nssm::default'
-    end
   end
 end
