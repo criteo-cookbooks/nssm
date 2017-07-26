@@ -170,7 +170,7 @@ describe 'nssm_test::install_service' do
       it 'installs selenium' do
         expect(chef_run).to create_remote_file(::File.join(cache_dir, 'selenium-server-standalone-2.53.0.jar'))
       end
-      
+
       it 'calls nssm install resource' do
         expect(chef_run).to install_nssm('service name')
       end
