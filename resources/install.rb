@@ -18,7 +18,7 @@ action :install do
     checksum new_resource.sha256
     action :unzip
     notifies :create, 'remote_file[install nssm]', :immediately
-    not_if { Digest::SHA256.file("#{Chef::Config[:file_cache_path]}/#{basename}.zip").hexdigest == new_resource.sha256 }  if ::File.exist?("#{Chef::Config[:file_cache_path]}/#{basename}.zip")
+    not_if { Digest::SHA256.file("#{Chef::Config[:file_cache_path]}/#{basename}.zip").hexdigest == new_resource.sha256 } if ::File.exist?("#{Chef::Config[:file_cache_path]}/#{basename}.zip")
   end
 
   remote_file 'install nssm' do
