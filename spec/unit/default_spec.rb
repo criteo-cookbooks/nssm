@@ -28,7 +28,7 @@ describe 'nssm::default' do
 
     it 'install nssm' do
       expect(chef_run).to create_remote_file('install nssm').with(
-        path: "C:\tmp\nssm-#{VERSION}.exe",
+        path: "C:\\tmp\\nssm-#{VERSION}.exe",
         source: "file:///#{CACHE}/nssm-2.24-94-g9c88bc1/win64/nssm.exe"
       )
     end
