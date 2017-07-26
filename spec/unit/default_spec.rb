@@ -18,7 +18,7 @@ describe 'nssm::default' do
         sha256: SHA256
       )
     end
-    
+
     it 'download nssm' do
       expect(chef_run).to unzip_windows_zipfile('download nssm').with(
         path: CACHE,
