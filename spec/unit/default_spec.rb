@@ -14,8 +14,8 @@ describe 'nssm::default' do
 
     it 'calls nssm_install resource' do
       expect(chef_run).to install_nssm_install('Install NSSM').with(
-        source: "https://nssm.cc/ci/nssm-2.24-94-g9c88bc1.zip",
-        sha256: "0bbe25025b69ebd8ab263ec4b443513d28a0d072e5fdd9b5cdb327359a27f96e"
+        source: "https://nssm.cc/ci/nssm-#{VERSION}.zip",
+        sha256: SHA256
       )
     end
     
