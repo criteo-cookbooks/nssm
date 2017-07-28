@@ -26,6 +26,7 @@ action :install do
   nssm_install 'Install NSSM' do
     source node['nssm']['src']
     sha256 node['nssm']['sha256']
+    only_if { node['nssm']['install_nssm'] }
   end
 
   # Declare the service for start notification
