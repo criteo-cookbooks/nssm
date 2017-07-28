@@ -13,11 +13,13 @@ if platform?('windows')
     checksum node['nssm']['sha256']
     action :unzip
     notifies :create, 'remote_file[install nssm]', :immediately
+    only_if { node['nssm']['install_nssm'] }
   end
 
   remote_file 'install nssm' do
     path ::NSSM.binary_path node
     source "file:///#{system_file}"
+    only_if { node['nssm']['install_nssm'] }
   end
 else
   Chef::Log.warn('NSSM can only be installed on Windows platforms!')
