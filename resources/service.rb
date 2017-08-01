@@ -43,7 +43,8 @@ action :install do
     only_if { current_resource && current_resource.nssm_binary != new_resource.nssm_binary }
   end
 
-  params = new_resource.parameters.merge(Application: new_resource.program, AppParameters: new_resource.args)
+  params = new_resource.parameters.merge(Application: new_resource.program)
+  params = params.merge(AppParameters: new_resource.args) unless new_resource.args.nil?
   params.map do |key, value|
     execute "Set parameter #{key} to #{value}" do
       command ::NSSM.command(new_resource.nssm_binary, :set, new_resource.servicename, key, value)
