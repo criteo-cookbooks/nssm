@@ -53,7 +53,7 @@ action :install do
   end
 
   # Some NSSM parameters have no meaningful default, list them here to prevent errors on reset command
-  params_no_default = ' AppDirectory DisplayName ObjectName Start Type '
+  params_no_default = ' Application AppDirectory DisplayName ObjectName Start Type '
 
   current_resource.parameters.each do |key, _value|
     execute "Reset parameter #{key} to default" do
