@@ -51,11 +51,11 @@ action :install do
       not_if { current_resource && current_resource.parameters[key] == ::NSSM.prepare_parameter(value) }
     end
   end
-  
-  #Some NSSM parameters have no meaningful default, list them here to prevent errors on reset command
-  params_no_default = %q{ AppDirectory DisplayName ObjectName Start Type }
-  
-  current_resource.parameters.each do |key, value|
+
+  # Some NSSM parameters have no meaningful default, list them here to prevent errors on reset command
+  params_no_default = ' AppDirectory DisplayName ObjectName Start Type '
+
+  current_resource.parameters.each do |key, _value|
     execute "Reset parameter #{key} to default" do
       command ::NSSM.command(new_resource.nssm_binary, :reset, new_resource.servicename, key)
       not_if { params.key?(key) || params_no_default.include?(key) }
