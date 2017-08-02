@@ -6,6 +6,7 @@ require 'chefspec/berkshelf'
 
 CACHE = Chef::Config[:file_cache_path]
 VERSION = '2.24-94-g9c88bc1'.freeze
+SHA256 = '0bbe25025b69ebd8ab263ec4b443513d28a0d072e5fdd9b5cdb327359a27f96e'.freeze
 
 def stub_win32_service_class
   return if defined?(::Win32::Service) && ::Win32::Service.is_a?(::RSpec::Mocks::Double)

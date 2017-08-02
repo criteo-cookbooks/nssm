@@ -23,7 +23,11 @@ load_current_value do |wanted|
 end
 
 action :install do
-  install_nssm
+  nssm_install 'Install NSSM' do
+    source node['nssm']['src']
+    sha256 node['nssm']['sha256']
+    only_if { node['nssm']['install_nssm'] }
+  end
 
   # Declare the service for start notification
   service new_resource.servicename
@@ -39,13 +43,24 @@ action :install do
     only_if { current_resource && current_resource.nssm_binary != new_resource.nssm_binary }
   end
 
-  params = new_resource.parameters.merge(Application: new_resource.program, AppParameters: new_resource.args)
-  params.map do |key, value|
+  params = new_resource.parameters.merge(Application: new_resource.program)
+  params = params.merge(AppParameters: new_resource.args) unless new_resource.args.nil?
+  params.each do |key, value|
     execute "Set parameter #{key} to #{value}" do
       command ::NSSM.command(new_resource.nssm_binary, :set, new_resource.servicename, key, value)
       not_if { current_resource && current_resource.parameters[key] == ::NSSM.prepare_parameter(value) }
     end
   end
+
+  # Some NSSM parameters have no meaningful default, list them here to prevent errors on reset command
+  params_no_default = ' Application AppDirectory DisplayName ObjectName Start Type '
+
+  current_resource.parameters.each do |key, _value|
+    execute "Reset parameter #{key} to default" do
+      command ::NSSM.command(new_resource.nssm_binary, :reset, new_resource.servicename, key)
+      not_if { params.key?(key.to_sym) || params_no_default.include?(key) }
+    end
+  end unless current_resource.nil?
 end
 
 action :install_if_missing do
@@ -80,13 +95,5 @@ end
 action_class do
   def whyrun_supported?
     true
-  end
-
-  # TODO: Move this into a dedicated resource
-  def install_nssm
-    return if run_context.loaded_recipe? 'nssm::default'
-    recipe_eval do
-      run_context.include_recipe 'nssm::default'
-    end
   end
 end
