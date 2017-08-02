@@ -85,25 +85,6 @@ checksum.
 - `start` - Start service after installing. Default -  true
 - `nssm_binary` - Path to nssm binary. Default - `node['nssm']['install_location']\nssm.exe`
 
-## ChefSpec Matchers
-
-The NSSM cookbook includes custom [ChefSpec](https://github.com/sethvargo/chefspec) matchers you can use to test your
-own cookbooks that consume Windows cookbook LWRPs.
-
-Example Matcher Usage
-
-```ruby
-expect(chef_run).to install_nssm('service name').with(
-  :program 'C:\Windows\System32\java.exe'
-  :args '-jar C:/path/to/my-executable.jar'
-)
-```
-
-NSSM Cookbook Matchers
-
-- install_nssm(servicename)
-- remove_nssm(servicename)
-
 ## Getting Help
 
 - Ask specific questions on [Stack Overflow](http://stackoverflow.com/questions/tagged/nssm).
