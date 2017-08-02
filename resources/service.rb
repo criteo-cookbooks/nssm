@@ -58,7 +58,7 @@ action :install do
   current_resource.parameters.each do |key, _value|
     execute "Reset parameter #{key} to default" do
       command ::NSSM.command(new_resource.nssm_binary, :reset, new_resource.servicename, key)
-      not_if { params.key?(key) || params_no_default.include?(key) }
+      not_if { params.key?(key.to_sym) || params_no_default.include?(key) }
     end
   end unless current_resource.nil?
 end
