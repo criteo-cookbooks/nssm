@@ -10,6 +10,6 @@ gem 'foodcritic'
 
 group :integration do
   gem 'kitchen-vagrant'
-  gem 'test-kitchen'
+  gem 'test-kitchen', '~> 1.16.0'
   gem 'winrm-fs'
 end

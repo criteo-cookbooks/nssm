@@ -1,6 +1,5 @@
 # Provide NSSM helper methods
 module NSSM
-  MARKER = '_-MARKER-_'.freeze unless constants.include? :MARKER
   extend ::Chef::Mixin::ShellOut
 
   module_function
@@ -42,14 +41,16 @@ module NSSM
   end
 
   def dump_parameters(binary, service)
-    cmd = shell_out(command(binary, :dump, service, MARKER))
-    cmd.stdout.each_line.map do |line|
-      case line
-      when /install #{MARKER}/
-        ['Application', strip_and_unescape(line.split(MARKER, 2).last)]
-      when /set #{MARKER}/
-        strip_and_unescape(line.split(MARKER, 2).last).split(' ', 2)
+    {}.tap do |result|
+      shell_out(command(binary, :dump, service)).stdout.each_line do |line|
+        case line
+        when /install #{service} (.*)/
+          result['Application'] = strip_and_unescape(::Regexp.last_match(1))
+        when /set #{service} (.*)/
+          key, value = strip_and_unescape(::Regexp.last_match(1)).split(' ', 2)
+          result[key] = value
+        end
       end
-    end.to_h
+    end
   end
 end
