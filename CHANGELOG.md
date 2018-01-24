@@ -4,6 +4,7 @@
 
 - Remote file is now before notification friendly (fixes #33)
 - Stop using non-documented argument for nssm dump (fixes #34)
+- Fixed a bug where AppExit needs a subparameter on reset
 
 ## 4.0.0 2017-08-02
 
