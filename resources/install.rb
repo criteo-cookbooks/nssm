@@ -24,6 +24,7 @@ action :install do
   remote_file 'install nssm' do
     path ::NSSM.binary_path node
     source "file:///#{system_file}"
+    only_if {::File.exist?("#{Chef::Config[:file_cache_path]}/#{basename}/#{system}/nssm.exe")}
   end
 end
 
