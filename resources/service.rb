@@ -54,11 +54,16 @@ action :install do
 
   # Some NSSM parameters have no meaningful default, list them here to prevent errors on reset command
   params_no_default = ' Application AppDirectory DisplayName ObjectName Start Type '
+  needs_sub_param = ' AppExit '
 
   current_resource.parameters.each do |key, _value|
     execute "Reset parameter #{key} to default" do
       command ::NSSM.command(new_resource.nssm_binary, :reset, new_resource.servicename, key)
-      not_if { params.key?(key.to_sym) || params_no_default.include?(key) }
+      not_if { params.key?(key.to_sym) || params_no_default.include?(key) || needs_sub_param.include?(key) }
+    end
+    execute "Reset parameter #{key} to default with default subparameter" do
+      command ::NSSM.command(new_resource.nssm_binary, :reset, new_resource.servicename, key, 'default')
+      only_if { needs_sub_param.include?(key) }
     end
   end unless current_resource.nil?
 end
