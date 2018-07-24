@@ -1,13 +1,13 @@
 provides :nssm_service
 provides :nssm # TODO: migrate to nssm_service with a breaking change notice
 
-property :servicename, identity: true, name_attribute: true
-property :program, kind_of: String, required: true
-property :args, kind_of: String
-property :parameters, kind_of: Hash, default: lazy { ::Mash.new }
-property :nssm_binary, kind_of: String, default: nil
+property :servicename, String, identity: true, name_property: true
+property :program, String, required: true
+property :args, String
+property :parameters, Hash, default: lazy { ::Mash.new }
+property :nssm_binary, [String, NilClass], default: nil
 # TODO: remove this
-property :start, kind_of: [TrueClass, FalseClass], default: true
+property :start, [TrueClass, FalseClass], default: true
 
 action :install do
   ::Chef::Log.warn('NSSM service can only be installed on Windows platforms!')

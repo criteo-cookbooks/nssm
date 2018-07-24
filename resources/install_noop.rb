@@ -1,7 +1,7 @@
 provides :nssm_install
 
-property :source, identity: true, name_attribute: true
-property :sha256, kind_of: String, required: true
+property :source, String, identity: true, name_property: true
+property :sha256, String, required: true
 
 default_action :install
 

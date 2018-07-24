@@ -2,12 +2,12 @@ provides :nssm_service, platform: 'windows'
 # TODO: migrate to nssm_service with a breaking change notice
 provides :nssm, platform: 'windows'
 
-property :servicename, name_attribute: true
-property :program, kind_of: String, required: true
-property :args, kind_of: String
-property :parameters, kind_of: Hash, default: lazy { ::Mash.new }
-property :nssm_binary, kind_of: String, default: lazy { ::NSSM.binary_path node }
-property :start, kind_of: [TrueClass, FalseClass], default: true
+property :servicename, String, name_property: true
+property :program, String, required: true
+property :args, String
+property :parameters, Hash, default: lazy { ::Mash.new }
+property :nssm_binary, [String, NilClass], default: lazy { ::NSSM.binary_path node }
+property :start, [TrueClass, FalseClass], default: true
 # TODO: add start as default action with a breaking change
 default_action :install
 
