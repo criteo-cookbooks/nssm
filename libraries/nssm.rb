@@ -41,7 +41,7 @@ module NSSM
   end
 
   def dump_parameters(binary, service)
-    {}.tap do |result|
+    ::Mash.new.tap do |result|
       shell_out(command(binary, :dump, service)).stdout.each_line do |line|
         case line
         when /install #{service} (.*)/
