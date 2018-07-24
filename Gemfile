@@ -5,8 +5,8 @@ source 'https://rubygems.org'
 gem 'berkshelf'
 gem 'chef', '>= 12.14.89'
 gem 'chefspec', '>= 7.1.0'
-gem 'cookstyle'
 gem 'foodcritic'
+gem 'rubocop', '= 0.58.2'
 
 group :integration do
   gem 'kitchen-vagrant'

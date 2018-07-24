@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require 'cookstyle'
 require 'foodcritic'
 require 'rubocop/rake_task'
 require 'rspec/core/rake_task'
@@ -13,4 +12,4 @@ RuboCop::RakeTask.new do |task|
 end
 FoodCritic::Rake::LintTask.new(:foodcritic)
 
-task default: %i(foodcritic rubocop spec)
+task default: %i[foodcritic rubocop spec]
