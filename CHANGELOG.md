@@ -1,6 +1,6 @@
 # NSSM CHANGELOG
 
-## 4.0.1 2018-07-24
+## 4.0.1 2018-07-25
 
 - Remote file is now before notification friendly (fixes #33)
 - Stop using non-documented argument for nssm dump (fixes #34)
