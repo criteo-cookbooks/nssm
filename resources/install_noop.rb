@@ -1,7 +1,8 @@
 provides :nssm_install
+unified_mode true
 
-property :source, String, identity: true, name_property: true
-property :sha256, String, required: true
+property :source, kind_of: String, identity: true, name_property: true
+property :sha256, kind_of: String, required: true
 
 default_action :install
 
@@ -10,7 +11,4 @@ action :install do
 end
 
 action_class do
-  def whyrun_supported?
-    true
-  end
 end

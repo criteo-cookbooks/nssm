@@ -1,5 +1,11 @@
 # NSSM CHANGELOG
 
+## 5.0.0 2021-07-02
+* [Wade Peacock] - Drop Windows Depends
+  - Switch to `archive_file` from `windows_zipfile`
+  - Minimum Chef Version to >= 15
+  - Cookstyle - Fix all issues
+
 ## 4.0.1 2018-07-25
 
 - Remote file is now before notification friendly (fixes #33)
@@ -8,7 +14,7 @@
 
 ## 4.0.0 2017-08-02
 
-- Convert default recipe to custom resource with idempotence 
+- Convert default recipe to custom resource with idempotence
 - Allow install of nssm to be optional
 - Properly escape parameters in install action (custom quoting should be removed)
 - Make start service idempotent

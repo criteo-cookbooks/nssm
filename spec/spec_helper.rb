@@ -5,9 +5,8 @@ require 'chefspec'
 require 'chefspec/berkshelf'
 
 CACHE = Chef::Config[:file_cache_path]
-VERSION = '2.24-94-g9c88bc1'.freeze
-SHA256 = '0bbe25025b69ebd8ab263ec4b443513d28a0d072e5fdd9b5cdb327359a27f96e'.freeze
-DRIVE = RUBY_PLATFORM =~ /mswin|mingw32|windows/ ? 'C:' : ''
+VERSION = '2.24-94-g9c88bc1'
+SHA256 = '0bbe25025b69ebd8ab263ec4b443513d28a0d072e5fdd9b5cdb327359a27f96e'
 
 def stub_win32_service_class
   return if defined?(::Win32::Service) && ::Win32::Service.is_a?(::RSpec::Mocks::Double)
@@ -16,7 +15,7 @@ end
 
 def stub_win32_service_method(method_name, service_name, *results)
   stub_win32_service_class
-  allow(::Win32::Service).to receive(method_name).with(service_name).and_return(*results)
+  expect(::Win32::Service).to receive(method_name).with(service_name).and_return(*results)
 end
 
 def stub_shellout(cmd, options = {})

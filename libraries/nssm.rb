@@ -16,7 +16,7 @@ module NSSM
       action, # simple keyword does not need transformation
       prepare_parameter(service),
       prepare_parameter(param),
-      prepare_parameter(sub_param, false) # last param does no need quoting
+      prepare_parameter(sub_param, false), # last param does no need quoting
     ].reject(&:empty?).join ' '
   end
 
@@ -41,7 +41,7 @@ module NSSM
   end
 
   def dump_parameters(binary, service)
-    ::Mash.new.tap do |result|
+    {}.tap do |result|
       shell_out(command(binary, :dump, service)).stdout.each_line do |line|
         case line
         when /install #{service} (.*)/
@@ -52,5 +52,33 @@ module NSSM
         end
       end
     end
+  end
+
+  ## Stuff for comparing and achieve idepempotency
+
+  def prepare_for_compare(key, value)
+    value = quote_integers(value)
+    quotes_or_no_quotes_for_compare(key, value)
+  end
+
+  def quote_integers(value)
+    if value.class.eql?(Integer)
+      "#{value}"
+    else
+      value
+    end
+  end
+
+  # Damn somethings need quotes, others do not.
+  def quotes_or_no_quotes_for_compare(key, value)
+    needs_no_quotes_for_compare_with_spaces = %w(Application AppExit)
+    # needs_no_quotes_for_compare_with_spaces = %w(Application AppDirectory AppStdout AppStderr DisplayName Description)
+    # needs_quotes_for_compare_with_spaces = %w(wade)
+    # This is ugly
+
+    if needs_no_quotes_for_compare_with_spaces.include?(key.to_s) && (value =~ / / ? true : false)
+      return value
+    end
+    prepare_parameter(value, true)
   end
 end
