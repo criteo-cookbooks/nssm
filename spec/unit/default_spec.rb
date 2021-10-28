@@ -19,19 +19,20 @@ describe 'nssm::default' do
       )
     end
 
-    it 'download nssm' do
-      expect(chef_run).to unzip_windows_zipfile('download nssm').with(
-        path: CACHE,
+    it 'downloads nssm' do
+      expect(chef_run).to create_remote_file('download nssm').with(
+        path: "#{CACHE}/nssm-#{VERSION}.zip",
         source: "https://nssm.cc/ci/nssm-#{VERSION}.zip"
       )
     end
 
-    it 'install nssm' do
+    it 'installs nssm' do
       allow(::File).to receive(:exist?).and_call_original
-      expect(::File).to receive(:exist?).with("#{CACHE}/nssm-2.24-94-g9c88bc1/win64/nssm.exe").and_return true
+      expect(::File).to receive(:exist?).with("#{CACHE}/nssm-#{VERSION}/nssm-#{VERSION}/win64/nssm.exe").and_return true
+
       expect(chef_run).to create_remote_file('install nssm').with(
         path: "C:\\tmp\\nssm-#{VERSION}.exe",
-        source: "file:///#{CACHE}/nssm-2.24-94-g9c88bc1/win64/nssm.exe"
+        source: "file:///#{CACHE}/nssm-#{VERSION}/nssm-#{VERSION}/win64/nssm.exe"
       )
     end
   end

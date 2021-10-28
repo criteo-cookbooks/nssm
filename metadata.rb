@@ -10,7 +10,6 @@ source_url 'https://github.com/criteo-cookbooks/nssm'
 issues_url 'https://github.com/criteo-cookbooks/nssm/issues'
 version '4.0.1'
 
-chef_version '>= 12.7'
+chef_version '>= 15.0'
 
 supports 'windows'
-depends 'windows'
