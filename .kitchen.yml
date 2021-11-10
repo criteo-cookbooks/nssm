@@ -4,21 +4,26 @@ driver:
 
 provisioner:
   name: chef_zero
-  require_chef_omnibus: 12.7
+  install_strategy: always
+  chef_license: accept
+  require_chef_omnibus: 16
+
+verifier:
+  name: inspec
 
 platforms:
-  - name: windows-2012r2
-    driver:
-      box: dhoer/windows-2012r2
+- name: windows-2016
+  driver:
+    box: mwrock/Windows2016
+    gui: false
 
 suites:
-  - name: nssm_test
-    run_list:
-      - nssm_test::install_service
-    attributes:
+- name: nssm_test
+  run_list:
+    - nssm_test::install_service
+  attributes:
 
-
-  - name: nssm_test_modification
-    run_list:
-      - nssm_test::modify_service
-    attributes:
+- name: nssm_test_modification
+  run_list:
+    - nssm_test::modify_service
+  attributes:

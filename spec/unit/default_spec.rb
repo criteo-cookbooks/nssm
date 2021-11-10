@@ -6,7 +6,7 @@ describe 'nssm::default' do
   context 'windows' do
     let(:chef_run) do
       ChefSpec::SoloRunner.new(
-        file_cache_path: CACHE, platform: 'windows', version: '2008R2', step_into: ['nssm_install']
+        file_cache_path: CACHE, platform: 'windows', version: '2016', step_into: ['nssm_install']
       ) do
         ENV['WINDIR'] = 'C:\tmp'
       end.converge(described_recipe)

@@ -5,7 +5,7 @@ require 'spec_helper'
 describe 'nssm_test::remove_service' do
   context 'windows' do
     let(:chef_run) do
-      ChefSpec::SoloRunner.new(platform: 'windows', version: '2008R2', step_into: ['nssm']).converge(described_recipe)
+      ChefSpec::SoloRunner.new(platform: 'windows', version: '2016', step_into: ['nssm']).converge(described_recipe)
     end
 
     before do
