@@ -9,7 +9,8 @@ gem 'foodcritic'
 gem 'rubocop', '= 0.58.2'
 
 group :integration do
+  gem 'kitchen-inspec'
   gem 'kitchen-vagrant'
-  gem 'test-kitchen', '~> 1.16.0'
+  gem 'test-kitchen'
   gem 'winrm-fs'
 end
