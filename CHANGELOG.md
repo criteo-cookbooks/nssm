@@ -1,5 +1,10 @@
 # NSSM CHANGELOG
 
+## 5.0.0 2021-10-28
+
+- Depends on Chef 15+
+- Remove dependency on Windows cookbook
+
 ## 4.0.1 2018-07-25
 
 - Remote file is now before notification friendly (fixes #33)
