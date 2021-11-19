@@ -2,12 +2,14 @@ provides :nssm_service, platform: 'windows'
 # TODO: migrate to nssm_service with a breaking change notice
 provides :nssm, platform: 'windows'
 
+unified_mode true
+
 property :servicename, String, name_property: true
 property :program, String, required: true
 property :args, String
 property :parameters, Hash, default: lazy { ::Mash.new }
 property :nssm_binary, [String, NilClass], default: lazy { ::NSSM.binary_path node }
-property :start, [TrueClass, FalseClass], default: true
+property :start, [true, false], default: true
 # TODO: add start as default action with a breaking change
 default_action :install
 
@@ -94,11 +96,5 @@ action :stop do
   service new_resource.servicename do
     action :stop
     not_if { current_resource.nil? }
-  end
-end
-
-action_class do
-  def whyrun_supported?
-    true
   end
 end
